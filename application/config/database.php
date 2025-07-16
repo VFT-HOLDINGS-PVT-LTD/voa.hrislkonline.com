@@ -76,9 +76,9 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'voa_v20',
+	'username' => 'voa_user',
+	'password' => 'do9FtGKHc_3=',
+	'database' => 'voa_db',
 	'dbdriver' => 'mysqli',
 	'port' => '3306',
 	'dbprefix' => '',
