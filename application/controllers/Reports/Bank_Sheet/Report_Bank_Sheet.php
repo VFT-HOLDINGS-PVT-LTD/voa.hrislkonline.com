@@ -320,7 +320,7 @@ class Report_Bank_Sheet extends CI_Controller
             $sheet->setCellValue('E' . $x, $row->Bnk_Br_ID);
             $sheet->setCellValue('F' . $x, str_pad($row->D_Salary, 12, '0', STR_PAD_LEFT));
             $sheet->setCellValue('G' . $x, 'SAL' . strtoupper(date('F')) . date('Y'));
-            $sheet->setCellValue('H' . $x, $row->NIC);
+            $sheet->setCellValueExplicit('H' . $x, $row->NIC, DataType::TYPE_STRING);
             // $sheet->setCellValue('D' . $x, $row->Account_no);
             $sheet->setCellValue('I' . $x, '0');
             $sheet->setCellValue('J' . $x, $row->Tel_mobile);
