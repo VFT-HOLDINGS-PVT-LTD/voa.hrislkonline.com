@@ -987,19 +987,7 @@ class Payroll_Process extends CI_Controller
 
                 $Att_Allowance = 0;
 
-                if ($NopayDays == null) {
-                    $NopayDays = 0;
-                }
-
-                //**** Calculate no pay amount
-                // $NopayRate = ($BasicSal + $Incentive) / 22;
-                $NopayRate = $Gross_sal / 22;
-
-                if ($is_no_pay == 1) {
-                    $NopayDays = 0;
-                }
-
-                $Nopay_Deduction = $NopayRate * $NopayDays;
+            //    Old nopay
 
                 //**** Get Allowance Details
                 // $budget_relevance = $this->Db_model->getfilteredData("select Br_ID, Amount from tbl_varialble_br where EmpNo=$EmpNo and Month=$month and Year=$year");
@@ -1751,6 +1739,20 @@ $tbFuel_Ded = 0;
                 
                 //calculate Gross pay
                 $grosspay = $Gross_sal + $Allowances;
+
+                 if ($NopayDays == null) {
+                    $NopayDays = 0;
+                }
+
+                //**** Calculate no pay amount
+                // $NopayRate = ($BasicSal + $Incentive) / 22;
+                $NopayRate = $Gross_sal / 22;
+
+                if ($is_no_pay == 1) {
+                    $NopayDays = 0;
+                }
+
+                $Nopay_Deduction = $NopayRate * $NopayDays;
 
                 $D_Salary = $grosspay - $Tot_deductions;
 
