@@ -992,7 +992,8 @@ class Payroll_Process extends CI_Controller
                 }
 
                 //**** Calculate no pay amount
-                $NopayRate = ($BasicSal + $Incentive) / 22;
+                // $NopayRate = ($BasicSal + $Incentive) / 22;
+                $NopayRate = $Gross_sal / 22;
 
                 if ($is_no_pay == 1) {
                     $NopayDays = 0;
