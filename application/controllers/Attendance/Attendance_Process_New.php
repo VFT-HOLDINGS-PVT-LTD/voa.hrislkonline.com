@@ -1161,6 +1161,9 @@ class Attendance_Process_New extends CI_Controller
                                 $HaffDayaLeave = $this->Db_model->getfilteredData("SELECT COUNT(LV_ID) AS ID FROM tbl_leave_entry where EmpNo = '" .$EmpNo."' and Leave_Date = '" .$FromDate."' AND Leave_Count='0.5' AND Is_Approve = 1");
                                 if ($HaffDayaLeave[0]->ID > 0) {
                                     $DayStatus = 'HFD';
+                                    $Late_Status = 0;
+                                    $Nopay = 0;
+                                    $Nopay_Hrs = 0;
                                 }
                                 if ($ShiftType == ' ') {
                                         $DayStatus = 'AB';
