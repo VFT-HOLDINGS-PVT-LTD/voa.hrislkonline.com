@@ -33,8 +33,8 @@ class Shift_Allocation extends CI_Controller
         // $data['data_roster'] = $this->Db_model->getData('RosterCode,RosterName', 'tbl_rosterpatternweeklyhd');
         // $data['data_roster'] = $this->Db_model->getfilteredData("select RosterCode,RosterName from tbl_rosterpatternweeklyhd where CurrentYear = '2025'");
         // $data['data_roster'] = $this->Db_model->getfilteredData("select RosterCode,RosterName from tbl_rosterpatternweeklyhd WHERE (CurrentYear = '".$Year."' AND MonthType='Weekly') OR (CurrentYear = '".$Year."' AND MonthType='".$Month."');");
-        $data['data_roster'] = $this->Db_model->getfilteredData("SELECT RosterCode, RosterName FROM tbl_rosterpatternweeklyhd WHERE ((CurrentYear = '".$Year."' AND MonthType = 'Weekly') OR (CurrentYear = '".$Year."' AND MonthType = '".$Month."') OR (CurrentYear = '2025' AND  MonthType = 'June')) AND RosterCode > 'RS0594';");
-        // $data['data_roster'] = $this->Db_model->getfilteredData("SELECT RosterCode, RosterName FROM tbl_rosterpatternweeklyhd WHERE ((CurrentYear = '".$Year."' AND MonthType = 'Weekly') OR (CurrentYear = '".$Year."' AND MonthType = '".$Month."')) AND RosterCode > 'RS0594';");
+        // $data['data_roster'] = $this->Db_model->getfilteredData("SELECT RosterCode, RosterName FROM tbl_rosterpatternweeklyhd WHERE ((CurrentYear = '".$Year."' AND MonthType = 'Weekly') OR (CurrentYear = '".$Year."' AND MonthType = '".$Month."') OR (CurrentYear = '2025' AND  MonthType = 'June')) AND RosterCode > 'RS0594';");
+        $data['data_roster'] = $this->Db_model->getfilteredData("SELECT RosterCode, RosterName FROM tbl_rosterpatternweeklyhd WHERE ((CurrentYear = '".$Year."' AND MonthType = 'Weekly') OR (CurrentYear = '".$Year."' AND MonthType = '".$Month."')) AND RosterCode > 'RS0594';");
 
 
         $this->load->view('Attendance/Shift_Allocation/index', $data);

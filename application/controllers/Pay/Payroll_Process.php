@@ -52,8 +52,6 @@ class Payroll_Process extends CI_Controller
         //For loop for All active employees 
         for ($x = 0; $x < count($dtEmp['EmpData']); $x++) {
 
-
-
             $EmpNo = $dtEmp['EmpData'][$x]->EmpNo;
             $EpfNo = $dtEmp['EmpData'][$x]->EPFNO;
             $Dep_ID = $dtEmp['EmpData'][$x]->Dep_ID;
@@ -71,6 +69,9 @@ class Payroll_Process extends CI_Controller
 
             if ($HasRow[0]->HasRow > 0) {
 
+                // echo "1";
+                // die;
+
                 //            var_dump($dtEmp['EmpData']);die;
                 //Get Employee Basic Salary | Incentive
                 $SalData = $this->Db_model->getfilteredData("select EmpNo,EPFNO, Is_EPF,Dep_ID, Des_ID,Basic_Salary,Fixed_Allowance,Incentive,is_nopay_calc from tbl_empmaster where EmpNo=$EmpNo");
@@ -85,21 +86,21 @@ class Payroll_Process extends CI_Controller
                 $Nopay = $this->Db_model->getfilteredData("select sum(nopay) as nopay, sum(nopay_hrs) nopay_hrs,sum(Att_Allow) as Att_Allow from tbl_individual_roster where EmpNo=$EmpNo and EXTRACT(MONTH FROM FDate)=$month and EXTRACT(YEAR FROM FDate)=$year AND ShType = 'DU' ");
                 $NopayDays = $Nopay[0]->nopay;
 
-                if ($NopayDays == null) {
-                    $NopayDays = 0;
-                }
+                // if ($NopayDays == null) {
+                //     $NopayDays = 0;
+                // }
 
-                //**** Calculate no pay amount
-                $NopayRate = ($BasicSal + $Incentive) / 22;
-
-
-                if ($is_no_pay == 1) {
-                    $NopayDays = 0;
-                }
+                // //**** Calculate no pay amount
+                // $NopayRate = ($BasicSal + $Incentive) / 22;
 
 
+                // if ($is_no_pay == 1) {
+                //     $NopayDays = 0;
+                // }
 
-                $Nopay_Deduction = $NopayRate * $NopayDays;
+
+
+                // $Nopay_Deduction = $NopayRate * $NopayDays;
 
 
                 //**** Get Allowance Details
@@ -805,6 +806,65 @@ class Payroll_Process extends CI_Controller
                 *payee tax calculate end
                 */
 
+                $FixedAllowances1 = $this->Db_model->getfilteredData("SELECT Alw_ID, Amount FROM tbl_fixed_allowance WHERE EmpNo=$EmpNo ORDER BY tbl_fixed_allowance.Alw_ID");
+
+                $tbPerformanceFixed = 0;
+                $tbAttendancesFixed = 0;
+                $tbFuelFixed = 0;
+                $tbTransportFixed = 0;
+                $tbTravelingFixed = 0;
+                $tbSPAllowanceFixed = 0;
+                $tbIncrementFixed = 0;
+                $tbOther_OTFixed = 0;
+
+                foreach ($FixedAllowances1 as $item) {
+                    switch ($item->Alw_ID) {
+                        case 1:
+                            $tbPerformanceFixed = $item->Amount;
+                            break;
+                        case 2:
+                            $tbAttendancesFixed = $item->Amount;
+                            break;
+                        case 3:
+                            $tbFuelFixed = $item->Amount;
+                            break;
+                        case 4:
+                            $tbTransportFixed = $item->Amount;
+                            break;
+                        case 5:
+                            $tbTravelingFixed = $item->Amount;
+                            break;
+                        case 6:
+                            $tbSPAllowanceFixed = $item->Amount;
+                            break;
+                        case 7:
+                            $tbIncrementFixed = $item->Amount;
+                            break;
+                        case 8:
+                            $tbOther_OTFixed = $item->Amount;
+                            break;
+                    }
+                }
+
+                $Fixed_Allowance1 = $tbPerformanceFixed + $tbAttendancesFixed + $tbFuelFixed + $tbTransportFixed + $tbTravelingFixed + $tbSPAllowanceFixed + $tbIncrementFixed + $tbOther_OTFixed;
+
+
+                $Gross_sal1 = ($BasicSal + $Fixed_Allowance1 + $Incentive + $budgetrelevances);
+
+                 if ($NopayDays == null) {
+                    $NopayDays = 0;
+                }
+
+                //**** Calculate no pay amount
+                // $NopayRate = ($BasicSal + $Incentive) / 22;
+                $NopayRate = $Gross_sal1 / 30;
+
+                if ($is_no_pay == 1) {
+                    $NopayDays = 0;
+                }
+
+                $Nopay_Deduction = $NopayRate * $NopayDays;
+
                 //Calculate EPF Employee
                 $EPF_Worker = (8 / 100) * ($BasicSal + $Fixed_Allowance + $budgetrelevances);
 
@@ -836,11 +896,17 @@ class Payroll_Process extends CI_Controller
                     $Tot_deductions = $payee_now_amount + $EPF_Worker + $Sal_advance + $Festivel_Advance + $uniform + $other + $deduction1 + $deduction2 + $LoanMonth + $Nopay_Deduction + $tbMobile_Ded + $tbFuel_Ded + $tbOther_Ded + $welfair_1 + $stamp_Duty1;
 
                 }
-                $netSal = $grosspay - $Tot_deductions;
+                
                 //calculate Gross pay
                 $grosspay = $Gross_sal;
 
+                $netSal = $grosspay - $Tot_deductions;
+
                 $D_Salary = $grosspay - $Tot_deductions;
+
+                //calculate Gross pay
+                $grosspay = $Gross_sal + $Allowances;
+
 
                 $data = array(
                     'EmpNo' => $EmpNo,
@@ -903,75 +969,79 @@ class Payroll_Process extends CI_Controller
                     'Gross_pay' => $grosspay,
                     'Gross_sal' => $Gross_sal,
                     'D_Salary' => $D_Salary,
-                    'Net_salary' => $netSal
+                    'Net_salary' => $netSal,
+                    'G'=>$Gross_sal1
                 );
+
+                print_r($data);
 
 
                 //***** Update Salary Table
-                $whereArray = array("EmpNo" => $EmpNo, 'Month' => $month, 'Year' => $year);
-                $result = $this->Db_model->updateData("tbl_salary", $data, $whereArray);
+                // $whereArray = array("EmpNo" => $EmpNo, 'Month' => $month, 'Year' => $year);
+                // $result = $this->Db_model->updateData("tbl_salary", $data, $whereArray);
 
 
-                /*
-                 * Loan Amount
-                 */
-                if (empty($Loan[0]->Paid_Amount)) {
-                    $PaidAmount = 0;
-                } else {
-                    $PaidAmount = $Loan[0]->Paid_Amount;
-                }
+                // /*
+                //  * Loan Amount
+                //  */
+                // if (empty($Loan[0]->Paid_Amount)) {
+                //     $PaidAmount = 0;
+                // } else {
+                //     $PaidAmount = $Loan[0]->Paid_Amount;
+                // }
 
-                if (empty($Loan[0]->FullAmount)) {
-                    $Full_Amount = 0;
-                } else {
-                    $Full_Amount = $Loan[0]->FullAmount;
-                }
+                // if (empty($Loan[0]->FullAmount)) {
+                //     $Full_Amount = 0;
+                // } else {
+                //     $Full_Amount = $Loan[0]->FullAmount;
+                // }
 
-                //****** Loan Amount deduction process
-                $PaidAmount_to = $PaidAmount + $LoanMonth;
-                $BalanceAmount = $Full_Amount - $PaidAmount_to;
+                // //****** Loan Amount deduction process
+                // $PaidAmount_to = $PaidAmount + $LoanMonth;
+                // $BalanceAmount = $Full_Amount - $PaidAmount_to;
 
-                if ($BalanceAmount <= 0) {
-                    $Is_Settele = 1;
-                } else {
-                    $Is_Settele = 0;
-                }
+                // if ($BalanceAmount <= 0) {
+                //     $Is_Settele = 1;
+                // } else {
+                //     $Is_Settele = 0;
+                // }
 
-                $data_loan = array(
-                    'EmpNo' => $EmpNo,
-                    'Paid_Amount' => $PaidAmount_to,
-                    'Balance_amount' => $BalanceAmount,
-                    'Is_Settled' => $Is_Settele,
-                );
+                // $data_loan = array(
+                //     'EmpNo' => $EmpNo,
+                //     'Paid_Amount' => $PaidAmount_to,
+                //     'Balance_amount' => $BalanceAmount,
+                //     'Is_Settled' => $Is_Settele,
+                // );
 
-                $HasRow = $this->Db_model->getfilteredData("select count(EmpNo) as HasRow from tbl_loan_trans where EmpNo=$EmpNo and month=$month and year=$year");
+                // $HasRow = $this->Db_model->getfilteredData("select count(EmpNo) as HasRow from tbl_loan_trans where EmpNo=$EmpNo and month=$month and year=$year");
 
 
-                if ($LoanMonth == 0) {
-                } {
-                    $dataArray = array(
-                        'Year' => $year,
-                        'EmpNo' => $EmpNo,
-                        'Month' => $month,
-                        'Amount_month' => $LoanMonth,
-                        'Loan_ID' => $LoanID,
-                        'Time_Trans' => $timestamp,
-                    );
+                // if ($LoanMonth == 0) {
+                // } {
+                //     $dataArray = array(
+                //         'Year' => $year,
+                //         'EmpNo' => $EmpNo,
+                //         'Month' => $month,
+                //         'Amount_month' => $LoanMonth,
+                //         'Loan_ID' => $LoanID,
+                //         'Time_Trans' => $timestamp,
+                //     );
 
-                    $this->Db_model->insertData("tbl_loan_trans", $dataArray);
-                }
+                //     $this->Db_model->insertData("tbl_loan_trans", $dataArray);
+                // }
 
-                $HasRow = $this->Db_model->getfilteredData("select count(EmpNo) as HasRow from tbl_loan_trans where EmpNo=$EmpNo and month=$month and year=$year ");
+                // $HasRow = $this->Db_model->getfilteredData("select count(EmpNo) as HasRow from tbl_loan_trans where EmpNo=$EmpNo and month=$month and year=$year ");
 
-                if ($HasRow[0]->HasRow) {
-                } else {
-                    $whereArray_loan = array("EmpNo" => $EmpNo);
-                    $result = $this->Db_model->updateData("tbl_loans", $data_loan, $whereArray_loan);
-                }
+                // if ($HasRow[0]->HasRow) {
+                // } else {
+                //     $whereArray_loan = array("EmpNo" => $EmpNo);
+                //     $result = $this->Db_model->updateData("tbl_loans", $data_loan, $whereArray_loan);
+                // }
 
-                //*******Else Salary records haven't in Salary table insert salary records into salary table
+            //*******Else Salary records haven't in Salary table insert salary records into salary table
             } else {
-
+// echo "2";
+//                 die;
                 $SalData = $this->Db_model->getfilteredData("select EmpNo,EPFNO,Is_EPF, Dep_ID, Des_ID,Basic_Salary,Fixed_Allowance,Incentive,is_nopay_calc from tbl_empmaster where EmpNo=$EmpNo");
                 $BasicSal = $SalData[0]->Basic_Salary;
                 $Incentive = $SalData[0]->Incentive;
@@ -1289,14 +1359,16 @@ class Payroll_Process extends CI_Controller
                 $Sal_Advance = $this->Db_model->getfilteredData("select Amount from tbl_salary_advance where Is_Approve=1 and EmpNo=$EmpNo and month=$month and year = $year");
 
                 $Fest_Advance = $this->Db_model->getfilteredData("SELECT Amount from tbl_festivel_advance where EmpNo=$EmpNo and Month=$month and Year = $year");
+                
                 $uniform = 0;
                 $other = 0;
                 $deduction1 = 0;
                 $deduction2 = 0;
-$tbOther_Ded = 0;
-$tbMobile_Ded = 0;
-$tbFuel_Ded = 0;
+                $tbOther_Ded = 0;
+                $tbMobile_Ded = 0;
+                $tbFuel_Ded = 0;
                 $stamp_Duty1 = 0;
+
                 if (!empty($stamp_Duty)) {
                     $stamp_Duty1 = $stamp_Duty[0]->Amount;
                 } else if (empty($stamp_Duty) && !empty($fixed_stamp_Duty)) {
@@ -1399,7 +1471,7 @@ $tbFuel_Ded = 0;
 
                 /*
                  * Loan Details
-                 */
+                */
 
                 if (empty($Loan[0]->Loan_ID)) {
                     $LoanID = 0;
@@ -1734,19 +1806,20 @@ $tbFuel_Ded = 0;
                     $EPF_Employer = 0;
                     $ETF = 0;
                     $Tot_deductions = $payee_now_amount + $EPF_Worker + $Sal_advance + $Festivel_Advance + $uniform + $other + $deduction1 + $deduction2 + $LoanMonth + $tbMobile_Ded + $tbFuel_Ded + $tbOther_Ded + $welfair_1 + $stamp_Duty1;
-
                 }
                 
                 //calculate Gross pay
                 $grosspay = $Gross_sal + $Allowances;
 
-                 if ($NopayDays == null) {
+                $Gross_sal1 = ($BasicSal + $Fixed_Allowance + $Incentive + $budgetrelevances);
+
+                if ($NopayDays == null) {
                     $NopayDays = 0;
                 }
 
                 //**** Calculate no pay amount
                 // $NopayRate = ($BasicSal + $Incentive) / 22;
-                $NopayRate = $Gross_sal / 22;
+                $NopayRate = $Gross_sal1 / 30;
 
                 if ($is_no_pay == 1) {
                     $NopayDays = 0;
@@ -1820,6 +1893,8 @@ $tbFuel_Ded = 0;
                     )
                 );
 
+                // print_r($data);
+
                 $this->db->insert_batch('tbl_salary', $data);
 
                 if (empty($Loan[0]->Paid_Amount)) {
@@ -1858,7 +1933,7 @@ $tbFuel_Ded = 0;
             }
         }
 
-        $this->session->set_flashdata('success_message', 'Payroll Process successfully');
-        redirect(base_url() . 'Pay/Payroll_Process');
+        // $this->session->set_flashdata('success_message', 'Payroll Process successfully');
+        // redirect(base_url() . 'Pay/Payroll_Process');
     }
 }
