@@ -1933,7 +1933,7 @@ class Payroll_Process extends CI_Controller
             }
         }
 
-        // $this->session->set_flashdata('success_message', 'Payroll Process successfully');
-        // redirect(base_url() . 'Pay/Payroll_Process');
+        $this->session->set_flashdata('success_message', 'Payroll Process successfully');
+        redirect(base_url() . 'Pay/Payroll_Process');
     }
 }
