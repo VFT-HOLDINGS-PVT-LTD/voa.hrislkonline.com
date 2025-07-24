@@ -817,31 +817,31 @@ class Payroll_Process extends CI_Controller
                 $tbIncrementFixed = 0;
                 $tbOther_OTFixed = 0;
 
-                foreach ($FixedAllowances1 as $item) {
-                    switch ($item->Alw_ID) {
+                foreach ($FixedAllowances1 as $item1) {
+                    switch ($item1->Alw_ID) {
                         case 1:
-                            $tbPerformanceFixed = $item->Amount;
+                            $tbPerformanceFixed = $item1->Amount;
                             break;
                         case 2:
-                            $tbAttendancesFixed = $item->Amount;
+                            $tbAttendancesFixed = $item1->Amount;
                             break;
                         case 3:
-                            $tbFuelFixed = $item->Amount;
+                            $tbFuelFixed = $item1->Amount;
                             break;
                         case 4:
-                            $tbTransportFixed = $item->Amount;
+                            $tbTransportFixed = $item1->Amount;
                             break;
                         case 5:
-                            $tbTravelingFixed = $item->Amount;
+                            $tbTravelingFixed = $item1->Amount;
                             break;
                         case 6:
-                            $tbSPAllowanceFixed = $item->Amount;
+                            $tbSPAllowanceFixed = $item1->Amount;
                             break;
                         case 7:
-                            $tbIncrementFixed = $item->Amount;
+                            $tbIncrementFixed = $item1->Amount;
                             break;
                         case 8:
-                            $tbOther_OTFixed = $item->Amount;
+                            $tbOther_OTFixed = $item1->Amount;
                             break;
                     }
                 }
