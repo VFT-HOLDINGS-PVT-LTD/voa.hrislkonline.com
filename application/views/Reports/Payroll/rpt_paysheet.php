@@ -128,7 +128,7 @@ function generateDepartmentPDF($pdf, $ass_department_name, $ass_department_data,
                 <th style="width:50px;">FUEL-DED</th>
                 <th style="width:50px;">OTHER-DED</th>
                 <th style="width:50px;">WELFAIR</th>
-                <th style="width:40px;">NO PAY</th> 
+                <th style="width:40px;">NO PAY</th>
                 <th style="width:40px;">STAMP-D</th>              
                 <th style="width:50px;">EPF 8%</th>
                 <th style="width:50px;">TOT DEDUCTION</th>

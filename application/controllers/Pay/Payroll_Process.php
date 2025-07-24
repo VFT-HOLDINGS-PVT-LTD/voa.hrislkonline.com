@@ -966,7 +966,7 @@ class Payroll_Process extends CI_Controller
                     'Payee_amount' => $payee_now_amount,
                     'Stamp_duty' => $stamp_Duty1,
                     'tot_deduction' => $Tot_deductions,
-                    'Gross_pay' => $grosspay,
+                    'Gross_pay' => $Gross_sal,
                     'Gross_sal' => $Gross_sal,
                     'D_Salary' => $D_Salary,
                     'Net_salary' => $netSal,

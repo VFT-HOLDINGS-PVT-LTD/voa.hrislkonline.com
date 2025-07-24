@@ -71,6 +71,7 @@
                 <th>FUEL-DED</th>
                 <th>WELFAIR</th>
                 <th>NO PAY</th>
+                <th>NO DAYS</th>
                 <th>EPF 8%</th>
                 <th>TOT DEDUCTION</th>
                 <th>NET SALARY</th>
@@ -105,6 +106,7 @@
                         <td><?= number_format($row->Fuel_Ded, 2, '.', ',') ?></td>                                                              
                         <td><?= number_format($row->Wellfare, 2, '.', ',') ?></td> 
                         <td><?= number_format($row->no_pay_deduction, 2, '.', ',') ?></td>
+                        <td><?= $row->No_Pay_days ?></td>
                         <td><?= number_format($row->EPF_Worker_Amount, 2, '.', ',') ?></td>
                         <td><?= number_format($row->tot_deduction, 2, '.', ',') ?></td>
                         <td><?= number_format($row->D_Salary, 2, '.', ',') ?></td>
