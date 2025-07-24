@@ -973,70 +973,70 @@ class Payroll_Process extends CI_Controller
                     'G'=>$Gross_sal1
                 );
 
-                print_r($data);
+                // print_r($data);
 
 
                 //***** Update Salary Table
-                // $whereArray = array("EmpNo" => $EmpNo, 'Month' => $month, 'Year' => $year);
-                // $result = $this->Db_model->updateData("tbl_salary", $data, $whereArray);
+                $whereArray = array("EmpNo" => $EmpNo, 'Month' => $month, 'Year' => $year);
+                $result = $this->Db_model->updateData("tbl_salary", $data, $whereArray);
 
 
-                // /*
-                //  * Loan Amount
-                //  */
-                // if (empty($Loan[0]->Paid_Amount)) {
-                //     $PaidAmount = 0;
-                // } else {
-                //     $PaidAmount = $Loan[0]->Paid_Amount;
-                // }
+                /*
+                 * Loan Amount
+                 */
+                if (empty($Loan[0]->Paid_Amount)) {
+                    $PaidAmount = 0;
+                } else {
+                    $PaidAmount = $Loan[0]->Paid_Amount;
+                }
 
-                // if (empty($Loan[0]->FullAmount)) {
-                //     $Full_Amount = 0;
-                // } else {
-                //     $Full_Amount = $Loan[0]->FullAmount;
-                // }
+                if (empty($Loan[0]->FullAmount)) {
+                    $Full_Amount = 0;
+                } else {
+                    $Full_Amount = $Loan[0]->FullAmount;
+                }
 
-                // //****** Loan Amount deduction process
-                // $PaidAmount_to = $PaidAmount + $LoanMonth;
-                // $BalanceAmount = $Full_Amount - $PaidAmount_to;
+                //****** Loan Amount deduction process
+                $PaidAmount_to = $PaidAmount + $LoanMonth;
+                $BalanceAmount = $Full_Amount - $PaidAmount_to;
 
-                // if ($BalanceAmount <= 0) {
-                //     $Is_Settele = 1;
-                // } else {
-                //     $Is_Settele = 0;
-                // }
+                if ($BalanceAmount <= 0) {
+                    $Is_Settele = 1;
+                } else {
+                    $Is_Settele = 0;
+                }
 
-                // $data_loan = array(
-                //     'EmpNo' => $EmpNo,
-                //     'Paid_Amount' => $PaidAmount_to,
-                //     'Balance_amount' => $BalanceAmount,
-                //     'Is_Settled' => $Is_Settele,
-                // );
+                $data_loan = array(
+                    'EmpNo' => $EmpNo,
+                    'Paid_Amount' => $PaidAmount_to,
+                    'Balance_amount' => $BalanceAmount,
+                    'Is_Settled' => $Is_Settele,
+                );
 
-                // $HasRow = $this->Db_model->getfilteredData("select count(EmpNo) as HasRow from tbl_loan_trans where EmpNo=$EmpNo and month=$month and year=$year");
+                $HasRow = $this->Db_model->getfilteredData("select count(EmpNo) as HasRow from tbl_loan_trans where EmpNo=$EmpNo and month=$month and year=$year");
 
 
-                // if ($LoanMonth == 0) {
-                // } {
-                //     $dataArray = array(
-                //         'Year' => $year,
-                //         'EmpNo' => $EmpNo,
-                //         'Month' => $month,
-                //         'Amount_month' => $LoanMonth,
-                //         'Loan_ID' => $LoanID,
-                //         'Time_Trans' => $timestamp,
-                //     );
+                if ($LoanMonth == 0) {
+                } {
+                    $dataArray = array(
+                        'Year' => $year,
+                        'EmpNo' => $EmpNo,
+                        'Month' => $month,
+                        'Amount_month' => $LoanMonth,
+                        'Loan_ID' => $LoanID,
+                        'Time_Trans' => $timestamp,
+                    );
 
-                //     $this->Db_model->insertData("tbl_loan_trans", $dataArray);
-                // }
+                    $this->Db_model->insertData("tbl_loan_trans", $dataArray);
+                }
 
-                // $HasRow = $this->Db_model->getfilteredData("select count(EmpNo) as HasRow from tbl_loan_trans where EmpNo=$EmpNo and month=$month and year=$year ");
+                $HasRow = $this->Db_model->getfilteredData("select count(EmpNo) as HasRow from tbl_loan_trans where EmpNo=$EmpNo and month=$month and year=$year ");
 
-                // if ($HasRow[0]->HasRow) {
-                // } else {
-                //     $whereArray_loan = array("EmpNo" => $EmpNo);
-                //     $result = $this->Db_model->updateData("tbl_loans", $data_loan, $whereArray_loan);
-                // }
+                if ($HasRow[0]->HasRow) {
+                } else {
+                    $whereArray_loan = array("EmpNo" => $EmpNo);
+                    $result = $this->Db_model->updateData("tbl_loans", $data_loan, $whereArray_loan);
+                }
 
             //*******Else Salary records haven't in Salary table insert salary records into salary table
             } else {
