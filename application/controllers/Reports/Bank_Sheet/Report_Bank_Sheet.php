@@ -317,6 +317,8 @@ class Report_Bank_Sheet extends CI_Controller
             $sheet->setCellValue('B' . $x, $row->Emp_Full_Name);
             $sheet->setCellValueExplicit('C' . $x, $acc_number, DataType::TYPE_STRING);
             $sheet->setCellValue('D' . $x, $row->Bnk_ID);
+
+            
             $sheet->setCellValue('E' . $x, $row->Bnk_Br_ID);
             $sheet->setCellValue('F' . $x, str_pad($row->D_Salary, 12, '0', STR_PAD_LEFT));
             $sheet->setCellValue('G' . $x, 'SAL' . strtoupper(date('F')) . date('Y'));

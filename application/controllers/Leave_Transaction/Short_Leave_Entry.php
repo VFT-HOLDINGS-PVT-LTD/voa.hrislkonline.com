@@ -194,40 +194,15 @@ class Short_Leave_Entry extends CI_Controller
         $H = explode("/", $date);
         $month = $H[1];
 
-        // $Monthonly = date('Y/m/d');
-        // $M = explode("/", $Monthonly);
-        // $Month1 = $M[1];
-
-        // $leaveentity = $this->Db_model->getfilteredData("SELECT * FROM tbl_emp_group INNER JOIN tbl_empmaster ON tbl_emp_group.Grp_ID = tbl_empmaster.Grp_ID WHERE tbl_empmaster.EmpNo = '$Emp' ");
-        // $shortleaveDate = $useentity["sh"][0]->Date;
-        // if (empty($useentity["sh"])) {
-
         $dateTime = date('Y/m/d h:i:s', time());
-        $useentity["sh"] = $this->Db_model->getfilteredData("SELECT * FROM tbl_shortlive WHERE `EmpNo` = '$Emp' AND `Month`='$month'");
-        $shortLeave = $this->Db_model->getfilteredData("SELECT count(ID) as ID FROM tbl_shortlive WHERE `EmpNo` = '$Emp' AND `Month`='$month'");
+        $useentity["sh"] = $this->Db_model->getfilteredData("SELECT * FROM tbl_shortlive WHERE `EmpNo` = '$Emp' AND `Month`='$month' AND `Year`='$year1'");
+        $shortLeave = $this->Db_model->getfilteredData("SELECT count(ID) as ID FROM tbl_shortlive WHERE `EmpNo` = '$Emp' AND `Month`='$month' AND `Year`='$year1'");
 
         // echo json_encode($shortLeave);
         // die;
 
         if ($shortLeave[0]->ID == 2) {
             // echo "thiywa2";
-            // foreach ($useentity["sh"] as $data) {
-            // echo json_encode($data);
-            // echo "1";
-            // thiynwanam
-            // if ($data != null) {
-            //     $shortleaveDate = $data->Date;
-            //     $ID = $data->ID;
-            //     $MonthData = $data->Month;
-
-            //     $this->session->set_flashdata('error_message', 'Already Have a Short Leave');
-            //     redirect('Leave_Transaction/Short_Leave_Entry/index');
-
-            // } else {
-
-            
-            // }
-            // }
             $this->session->set_flashdata('error_message', 'Already Have a Short Leave');
             redirect('Leave_Transaction/Short_Leave_Entry/index');
         } else {
@@ -243,30 +218,13 @@ class Short_Leave_Entry extends CI_Controller
                 'Apply_Date' => $dateTime,
                 'Is_pending' => '1',
                 'Is_Approve' => '0',
+                'Year' => $year1
             );
             $this->Db_model->insertData('tbl_shortlive', $data);
             $this->session->set_flashdata('success_message', 'Employee Short Leave Added');
             redirect('Leave_Transaction/Short_Leave_Entry/index');
             // echo "nee2";
             // echo "<br>";
-            // $data = array(
-            //     'EmpNo' => $Emp,
-            //     'from_time' => $from_time,
-            //     'to_time' => $to_time,
-            //     'Date' => $date1,
-            //     'Month' => $month,
-            //     'used' => 1,
-            //     // 'balance' => $leaveentity[0]->NosLeaveForMonth - 1,
-            //     'balance' => '0',
-            //     'Apply_Date' => $dateTime,
-            //     'Is_pending' => '1',
-            //     'Is_Approve' => '0',
-            // );
-            // $this->Db_model->insertData('tbl_shortlive', $data);
-            // $this->session->set_flashdata('success_message', 'Employee Short Leave Added');
-            // redirect('Leave_Transaction/Short_Leave_Entry/index');
-
-           
 
         }
 

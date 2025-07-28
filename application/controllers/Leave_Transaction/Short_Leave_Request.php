@@ -1,6 +1,6 @@
 <?php
 
-defined('BASEPATH') or exit ('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Short_Leave_Request extends CI_Controller
 {
@@ -29,7 +29,7 @@ class Short_Leave_Request extends CI_Controller
         $data['data_set'] = $this->Db_model->getData('EmpNo,Emp_Full_Name', 'tbl_empmaster');
         $data['data_leave'] = $this->Db_model->getData('Lv_T_ID,leave_name,leave_entitle', 'tbl_leave_types');
         $data['data_set_att'] = $this->Db_model->getfilteredData("select * from tbl_shortlive inner join tbl_empmaster on tbl_empmaster.EmpNo = tbl_shortlive.EmpNo where tbl_empmaster.EmpNo=$Emp order by ID desc");
-        
+
         $this->load->view('Leave_Transaction/Short_Leave_Request/index', $data);
 
         // $this->load->view('Leave_Transaction/Short_Leave_Entry/index', $data);
@@ -76,7 +76,7 @@ class Short_Leave_Request extends CI_Controller
 
 
 
-    public function insert_data()
+    public function insert_data1()
     {
 
         $currentUser = $this->session->userdata('login_user');
@@ -109,7 +109,7 @@ class Short_Leave_Request extends CI_Controller
         // if (empty($useentity["sh"])) {
 
         $dateTime = date('Y/m/d h:i:s', time());
-        $useentity["sh"] = $this->Db_model->getfilteredData("SELECT * FROM tbl_shortlive WHERE `EmpNo` = '$Emp' AND `Month`='$month'");
+        $useentity["sh"] = $this->Db_model->getfilteredData("SELECT * FROM tbl_shortlive WHERE `EmpNo` = '$Emp' AND `Month`='$month' AND `Year`='$year1'");
 
         if (!empty($useentity["sh"])) {
             // echo "thiywa2";
@@ -124,7 +124,7 @@ class Short_Leave_Request extends CI_Controller
 
                     $this->session->set_flashdata('error_message', 'Already Have a Short Leave');
                     redirect('Leave_Transaction/Short_Leave_Request/index');
-                 
+
                 } else {
 
                     $data = array(
@@ -139,6 +139,7 @@ class Short_Leave_Request extends CI_Controller
                         'Apply_Date' => $dateTime,
                         'Is_pending' => '1',
                         'Is_Approve' => '0',
+                        'Year' => $year1
                     );
                     $this->Db_model->insertData('tbl_shortlive', $data);
                     $this->session->set_flashdata('success_message', 'Employee Short Leave Added');
@@ -160,6 +161,7 @@ class Short_Leave_Request extends CI_Controller
                 'Apply_Date' => $dateTime,
                 'Is_pending' => '1',
                 'Is_Approve' => '0',
+                'Year' => $year1
             );
             $this->Db_model->insertData('tbl_shortlive', $data);
             $this->session->set_flashdata('success_message', 'Employee Short Leave Added');
@@ -168,6 +170,62 @@ class Short_Leave_Request extends CI_Controller
         }
 
 
+
+    }
+
+    public function insert_data()
+    {
+        $currentUser = $this->session->userdata('login_user');
+        $ApproveUser = $currentUser[0]->EmpNo;
+        $Emp = $this->input->post('txt_employee');
+        $date1 = $this->input->post('att_date');
+        $from_time = $this->input->post('in_time');
+        $to_time = $this->input->post('out_time');
+
+        date_default_timezone_set('Asia/Colombo');
+        $date = new DateTime();
+        $timestamp1 = date_format($date, 'Y-m-d');
+
+        $orderdate1 = explode('/', $date1);
+        $year1 = $orderdate1[0];
+
+        $month2 = $orderdate1[1];
+
+        $date = $date1;
+        $H = explode("/", $date);
+        $month = $H[1];
+
+        $dateTime = date('Y/m/d h:i:s', time());
+        $useentity["sh"] = $this->Db_model->getfilteredData("SELECT * FROM tbl_shortlive WHERE `EmpNo` = '$Emp' AND `Month`='$month' AND `Year`='$year1'");
+        $shortLeave = $this->Db_model->getfilteredData("SELECT count(ID) as ID FROM tbl_shortlive WHERE `EmpNo` = '$Emp' AND `Month`='$month' AND `Year`='$year1'");
+
+        // echo json_encode($shortLeave);
+        // die;
+
+        if ($shortLeave[0]->ID == 2) {
+            $this->session->set_flashdata('error_message', 'Already Have a Short Leave');
+            redirect('Leave_Transaction/Short_Leave_Request/index');
+        } else {
+            $data = array(
+                'EmpNo' => $Emp,
+                'from_time' => $from_time,
+                'to_time' => $to_time,
+                'Date' => $date1,
+                'Month' => $month,
+                'used' => 1,
+                // 'balance' => $leaveentity[0]->NosLeaveForMonth - 1,
+                'balance' => '0',
+                'Apply_Date' => $dateTime,
+                'Is_pending' => '1',
+                'Is_Approve' => '0',
+                'Year' => $year1
+            );
+            $this->Db_model->insertData('tbl_shortlive', $data);
+            
+            $this->session->set_flashdata('success_message', 'Employee Short Leave Added');
+            redirect('Leave_Transaction/Short_Leave_Request/index');
+
+        }
 
     }
 }
