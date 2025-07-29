@@ -123,12 +123,12 @@ class Attendance_Process_New extends CI_Controller
 
         if ($month1 == 0) {
             // Run the custom query
-            $result = $this->Db_model->getUpdateData($query1);
+            // $result = $this->Db_model->getUpdateData($query1);
 
             $query = "UPDATE `tbl_att_process` SET month = 1,selected_month = '" . $month . "' ;";
 
             // Run the custom query
-            $result = $this->Db_model->getUpdateData($query);
+            // $result = $this->Db_model->getUpdateData($query);
         }
 
 
@@ -1020,6 +1020,7 @@ class Attendance_Process_New extends CI_Controller
                                             // echo "2gg";
                                         }
                                     }
+
                                      $lateM = 0;
                                             $Late_Status = 0;
                                             $DayStatus = 'SL';
@@ -1212,393 +1213,394 @@ class Attendance_Process_New extends CI_Controller
 
                                 // echo $EmpNo . ' ' . $from_date . ' ' . $to_date . ' ' . $from_time . ' ' . $to_time . ' ' . $shift_day . ' /' . $InTime . ' ' . $OutTime . ' ' . $ED . ' Nopay' . $Nopay_Hrs . ' ' . $DayStatus . '<br>';
                                 // echo "<br>";
-                                $data_arr = array("InRec" => 1, "RMonth" => $DayStatus, "InDate" => $FromDate, "InTime" => $InTime, "OutRec" => 1, "Day_Type" => $Day_Type, "OutDate" => $OutDate, "OutTime" => $OutTime, "nopay" => $Nopay, "Is_processed" => 1, "DayStatus" => $DayStatus, "BeforeExH" => $BeforeShift, "AfterExH" => $AfterShiftWH, "LateSt" => $Late_Status, "LateM" => $lateM, "EarlyDepMin" => $ED, "NetLateM" => $NetLateM, "ApprovedExH" => $ApprovedExH, "nopay_hrs" => $Nopay_Hrs, "Att_Allow" => $Att_Allowance, "DOT" => $DOT);
-                                $whereArray = array("ID_roster" => $ID_Roster);
-                                $result = $this->Db_model->updateData("tbl_individual_roster", $data_arr, $whereArray);
+                                // $data_arr = array("InRec" => 1, "RMonth" => $DayStatus, "InDate" => $FromDate, "InTime" => $InTime, "OutRec" => 1, "Day_Type" => $Day_Type, "OutDate" => $OutDate, "OutTime" => $OutTime, "nopay" => $Nopay, "Is_processed" => 1, "DayStatus" => $DayStatus, "BeforeExH" => $BeforeShift, "AfterExH" => $AfterShiftWH, "LateSt" => $Late_Status, "LateM" => $lateM, "EarlyDepMin" => $ED, "NetLateM" => $NetLateM, "ApprovedExH" => $ApprovedExH, "nopay_hrs" => $Nopay_Hrs, "Att_Allow" => $Att_Allowance, "DOT" => $DOT);
+                                // $whereArray = array("ID_roster" => $ID_Roster);
+                                // $result = $this->Db_model->updateData("tbl_individual_roster", $data_arr, $whereArray);
 
                             }
-                            if (!empty($ShiftDetails['shift'][1]->ID_Roster)) {
-
-                                $modified_totimeold1 = '';
-                                $modified_fromtimeold1 = '';
-                                $ID_Roster1 = $ShiftDetails['shift'][1]->ID_Roster;
-                                if ($ShiftDetails['shift'][1]->ShType == null || empty($ShiftDetails['shift'][1]->ShType)) {
-                                    $shift_type1 = 'EX';
-                                }
-                                $shift_type1 = $ShiftDetails['shift'][1]->ShType;
-                                $shift_day1 = $ShiftDetails['shift'][1]->ShiftDay;
-                                $from_date1 = $ShiftDetails['shift'][1]->FDate;
-                                $from_time1 = $ShiftDetails['shift'][1]->FTime;
-                                $to_date1 = $ShiftDetails['shift'][1]->TDate;
-                                $to_time1 = $ShiftDetails['shift'][1]->TTime;
-                                $GracePrd1 = $ShiftDetails['shift'][1]->GracePrd;
-                                $cutofftime1 = $ShiftDetails['shift'][1]->HDSession;
-
-                                if ($shift_type1 == "DU" || $shift_type == "EX" || $shift_type == " " || $shift_type == "null" || $shift_type == "") {
-                                    $InDate1 = '';
-                                    $InTime1 = '';
-                                    $OutDate1 = '';
-                                    $OutTime1 = '';
-
-                                    $lateM1 = '';
-                                    $ED1 = '';
-                                    $DayStatus1 = '';
-                                    $AfterShiftWH1 = '';
-                                    $DOT1 = '';
-
-                                    // from - old
-                                    // $from_datetime1 = $from_date1 . ' ' . $from_time1;
-                                    // $time1 = new DateTime($from_datetime1);
-                                    // $time1->modify('-2 hours');
-                                    // $modified_fromtimepre1 = $time1->format('Y-m-d H:i:s');
-                                    // // from - future
-                                    // $from_datetimen1 = $from_date1 . ' ' . $from_time1;
-                                    // $time1 = new DateTime($from_datetimen1);
-                                    // $time1->modify('+2 hours');
-                                    // $modified_fromtimeold1 = $time1->format('Y-m-d H:i:s');
-
-                                    // // to - old
-                                    // $to_datetime1 = $to_date1 . ' ' . $to_time1;
-                                    // $time1 = new DateTime($to_datetime1);
-                                    // $time1->modify('-2 hours');
-                                    // $modified_totimepre1 = $time1->format('Y-m-d H:i:s');
-                                    // // to - future
-                                    // $to_datetimen1 = $to_date1 . ' ' . $to_time1;
-                                    // $time1 = new DateTime($to_datetimen1);
-                                    // $time1->modify('+2 hours');
-                                    // $modified_totimeold1 = $time1->format('Y-m-d H:i:s');
-
-                                    // Get the CheckIN
-                                    $dt_in_Records['dt_Records1'] = $this->Db_model->getfilteredData("select min(AttTime) as INTime,Enroll_No,AttDate from 
-                                tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='0' ");
-                                    $InDate1 = $dt_in_Records['dt_Records1'][0]->AttDate;
-                                    $InTime1 = $dt_in_Records['dt_Records1'][0]->INTime;
-
-                                    // Get the CheckOut
-                                    $dt_out_Records['dt_out_Records1'] = $this->Db_model->getfilteredData("select max(AttTime) as OutTime,Enroll_No,AttDate from 
-                                tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='1' ");
-                                    $OutDate1 = $dt_out_Records['dt_out_Records1'][0]->AttDate;
-                                    $OutTime1 = $dt_out_Records['dt_out_Records1'][0]->OutTime;
-
-                                    // Out Ekak nethnm check nextday(1st nextDay)
-                                    // if ($OutTime1 == null) {
-                                    //     $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
-                                    //     // $newDate = $to_date1;
-
-                                    //     // Get the CheckOut in the nextDay (before 9am)
-                                    //     $dt_out_Records['dt_out_Records1'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
-                                    //     tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre1' AND '$modified_totimeold1' AND Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' ");//update the 9 to 11.59 
-                                    //     // $dt_out_Records['dt_out_Records'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
-                                    //     // tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='$newDate' AND AttTime <'09:00:00' "); old-code
-                                    //     $OutDate1 = $dt_out_Records['dt_out_Records1'][0]->AttDate;
-                                    //     $OutTime1 = $dt_out_Records['dt_out_Records1'][0]->OutTime;
-                                    // }
-
-                                    if ($OutTime1 == null) {
-                                        $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
-                                        // $newDate = $to_date1;
-
-                                        $to_datetimen1 = $to_date1 . ' ' . $to_time1;
-                                        $time1 = new DateTime($to_datetimen1);
-                                        $time1->modify('+27 hours');
-                                        $modified_totimeold1 = $time1->format('Y-m-d H:i:s');
-
-                                        // Get the CheckOut in the nextDay (before 9am)
-                                        $dt_out_Records['dt_out_Records1'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
-                                    tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' ");
-                                        $OutDate1 = $dt_out_Records['dt_out_Records1'][0]->AttDate;
-                                        $OutTime1 = $dt_out_Records['dt_out_Records1'][0]->OutTime;
-                                    }
-
-                                    // if(!empty($OutTime)){
-                                    $dt_out_RecordsMS['dt_out_Recordsms1'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
-                                    tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='0' AND AttTime < '" . $OutTime . "' ");
-                                    // }
-                                    $OuttimeMS1 = $dt_out_RecordsMS['dt_out_Recordsms1'][0]->OutTime;
-
-                                    if (!empty($OuttimeMS1)) {
-                                        $OutTime = null;
-                                        $OutDate = null;
-
-                                    }
-
-                                    // if ($InTime1 != '' && $OutTime1 != '') {
-                                    //     $fromtime1 = $InDate1 . " " . $InTime1;
-                                    //     $totime1 = $OutDate1 . " " . $OutTime1;
-                                    //     $timestamp11 = strtotime($fromtime1);
-                                    //     $timestamp21 = strtotime($totime1);
-                                    //     $time_difference_seconds1 = ($timestamp21 - $timestamp11);
-                                    //     $time_difference_minutes1 = $time_difference_seconds1 / 60;
-                                    //     if ($time_difference_minutes1 < 60) {
-                                    //         $OutDate1 = '';
-                                    //         $OutTime1 = '';
-                                    //     }
-                                    //     //ms wela thiyenne out time ekada balanw
-                                    //     $fromtime1 = $to_date1 . " " . $to_time1;
-                                    //     $deduct_fromtime1 = strtotime($fromtime1 . " -2 hour");
-                                    //     $plus_fromtime1 = strtotime($fromtime1 . " +2 hour");
-                                    //     $ct1 = $InDate1 . " " . $InTime1;
-                                    //     $check_time1 = strtotime($ct1);
-                                    //     if ($deduct_fromtime1 <= $check_time1 && $check_time1 <= $plus_fromtime1) {
-                                    //         $OutDate1 = $InDate1;
-                                    //         $OutTime1 = $InTime1;
-                                    //         $InDate1 = '';
-                                    //         $InTime1 = '';
-                                    //     }
-                                    // }
-                                }
-                                // echo $ID_Roster1.' '.$from_date1.' '.$to_date1.' '.$from_time1.' '.$to_time1.' '.$shift_day1.' /'.$InTime1.' -'.$OutTime1;
-                                // echo "<br>";
-                                // $InDate1 = $InDate;
-                                // $InTime1 = $InTime;
-                                // $OutDate1 =  $OutDate;
-                                // $OutTime1 = $OutTime; 
-                                // if ($InTime == "00:00:00" || $InTime == null) {
-                                //     $OutTime = "00:00:00";
-                                //     $OutTime = "00:00:00";
-
-                                // }
-                                $data_arr = array("InRec" => 1, "InDate" => $FromDate, "InTime" => $InTime1, "OutRec" => 1, "Day_Type" => $Day_Type, "OutDate" => $OutDate1, "OutTime" => $OutTime1, "nopay" => $Nopay, "Is_processed" => 1, "DayStatus" => $DayStatus, "BeforeExH" => $BeforeShift, "AfterExH" => $AfterShiftWH, "LateSt" => $Late_Status, "LateM" => $lateM, "EarlyDepMin" => $ED, "NetLateM" => $NetLateM, "ApprovedExH" => $ApprovedExH, "nopay_hrs" => $Nopay_Hrs, "Att_Allow" => $Att_Allowance, "DOT" => $DOT);
-                                $whereArray = array("ID_roster" => $ID_Roster1);
-                                $result = $this->Db_model->updateData("tbl_individual_roster", $data_arr, $whereArray);
-                            }
-
-                            if (!empty($ShiftDetails['shift'][2]->ID_Roster)) {
+                            // 3
 
 
-                                $ID_Roster2 = $ShiftDetails['shift'][2]->ID_Roster;
-                                if ($ShiftDetails['shift'][2]->ShType == null || empty($ShiftDetails['shift'][2]->ShType)) {
-                                    $shift_type2 = 'EX';
-                                }
-                                $shift_type2 = $ShiftDetails['shift'][2]->ShType;
-                                $shift_day2 = $ShiftDetails['shift'][2]->ShiftDay;
-                                $from_date2 = $ShiftDetails['shift'][2]->FDate;
-                                $from_time2 = $ShiftDetails['shift'][2]->FTime;
-                                $to_date2 = $ShiftDetails['shift'][2]->TDate;
-                                $to_time2 = $ShiftDetails['shift'][2]->TTime;
-                                $GracePrd2 = $ShiftDetails['shift'][2]->GracePrd;
-                                $cutofftime2 = $ShiftDetails['shift'][2]->HDSession;
+                            //     $modified_totimeold1 = '';
+                            //     $modified_fromtimeold1 = '';
+                            //     $ID_Roster1 = $ShiftDetails['shift'][1]->ID_Roster;
+                            //     if ($ShiftDetails['shift'][1]->ShType == null || empty($ShiftDetails['shift'][1]->ShType)) {
+                            //         $shift_type1 = 'EX';
+                            //     }
+                            //     $shift_type1 = $ShiftDetails['shift'][1]->ShType;
+                            //     $shift_day1 = $ShiftDetails['shift'][1]->ShiftDay;
+                            //     $from_date1 = $ShiftDetails['shift'][1]->FDate;
+                            //     $from_time1 = $ShiftDetails['shift'][1]->FTime;
+                            //     $to_date1 = $ShiftDetails['shift'][1]->TDate;
+                            //     $to_time1 = $ShiftDetails['shift'][1]->TTime;
+                            //     $GracePrd1 = $ShiftDetails['shift'][1]->GracePrd;
+                            //     $cutofftime1 = $ShiftDetails['shift'][1]->HDSession;
 
-                                if ($shift_type2 == "DU" || $shift_type == "EX" || $shift_type == " " || $shift_type == "null" || $shift_type == "") {
-                                    $InDate2 = '2000-00-00';
-                                    $InTime2 = '00:00:00';
-                                    $OutDate2 = '2000-00-00';
-                                    $OutTime2 = '00:00:00';
+                            //     if ($shift_type1 == "DU" || $shift_type == "EX" || $shift_type == " " || $shift_type == "null" || $shift_type == "") {
+                            //         $InDate1 = '';
+                            //         $InTime1 = '';
+                            //         $OutDate1 = '';
+                            //         $OutTime1 = '';
 
-                                    $lateM2 = '';
-                                    $ED2 = '';
-                                    $DayStatus2 = '';
-                                    $AfterShiftWH2 = '';
-                                    $DOT2 = '';
+                            //         $lateM1 = '';
+                            //         $ED1 = '';
+                            //         $DayStatus1 = '';
+                            //         $AfterShiftWH1 = '';
+                            //         $DOT1 = '';
 
-                                    // from - old
-                                    $from_datetime2 = $from_date2 . ' ' . $from_time2;
-                                    $time2 = new DateTime($from_datetime2);
-                                    $time2->modify('-2 hours');
-                                    $modified_fromtimepre2 = $time2->format('Y-m-d H:i:s');
-                                    // from - future
-                                    $from_datetimen2 = $from_date2 . ' ' . $from_time2;
-                                    $time2 = new DateTime($from_datetimen2);
-                                    $time2->modify('+2 hours');
-                                    $modified_fromtimeold2 = $time2->format('Y-m-d H:i:s');
+                            //         // from - old
+                            //         // $from_datetime1 = $from_date1 . ' ' . $from_time1;
+                            //         // $time1 = new DateTime($from_datetime1);
+                            //         // $time1->modify('-2 hours');
+                            //         // $modified_fromtimepre1 = $time1->format('Y-m-d H:i:s');
+                            //         // // from - future
+                            //         // $from_datetimen1 = $from_date1 . ' ' . $from_time1;
+                            //         // $time1 = new DateTime($from_datetimen1);
+                            //         // $time1->modify('+2 hours');
+                            //         // $modified_fromtimeold1 = $time1->format('Y-m-d H:i:s');
 
-                                    // to - old
-                                    $to_datetime2 = $to_date2 . ' ' . $to_time2;
-                                    $time2 = new DateTime($to_datetime2);
-                                    $time2->modify('-2 hours');
-                                    $modified_totimepre2 = $time2->format('Y-m-d H:i:s');
-                                    // to - future
-                                    $to_datetimen2 = $to_date2 . ' ' . $to_time2;
-                                    $time2 = new DateTime($to_datetimen2);
-                                    $time2->modify('+2 hours');
-                                    $modified_totimeold2 = $time2->format('Y-m-d H:i:s');
+                            //         // // to - old
+                            //         // $to_datetime1 = $to_date1 . ' ' . $to_time1;
+                            //         // $time1 = new DateTime($to_datetime1);
+                            //         // $time1->modify('-2 hours');
+                            //         // $modified_totimepre1 = $time1->format('Y-m-d H:i:s');
+                            //         // // to - future
+                            //         // $to_datetimen1 = $to_date1 . ' ' . $to_time1;
+                            //         // $time1 = new DateTime($to_datetimen1);
+                            //         // $time1->modify('+2 hours');
+                            //         // $modified_totimeold1 = $time1->format('Y-m-d H:i:s');
 
+                            //         // Get the CheckIN
+                            //         $dt_in_Records['dt_Records1'] = $this->Db_model->getfilteredData("select min(AttTime) as INTime,Enroll_No,AttDate from 
+                            //     tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='0' ");
+                            //         $InDate1 = $dt_in_Records['dt_Records1'][0]->AttDate;
+                            //         $InTime1 = $dt_in_Records['dt_Records1'][0]->INTime;
 
-                                    // Get the CheckIN
-                                    $dt_in_Records['dt_Records2'] = $this->Db_model->getfilteredData("select min(AttTime) as INTime,Enroll_No,AttDate from 
-                                tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_fromtimepre2' AND '$modified_fromtimeold2' AND Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='0' ");
-                                    $InDate2 = $dt_in_Records['dt_Records2'][0]->AttDate;
-                                    $InTime2 = $dt_in_Records['dt_Records2'][0]->INTime;
+                            //         // Get the CheckOut
+                            //         $dt_out_Records['dt_out_Records1'] = $this->Db_model->getfilteredData("select max(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //     tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='1' ");
+                            //         $OutDate1 = $dt_out_Records['dt_out_Records1'][0]->AttDate;
+                            //         $OutTime1 = $dt_out_Records['dt_out_Records1'][0]->OutTime;
 
-                                    // Get the CheckOut
-                                    $dt_out_Records['dt_out_Records2'] = $this->Db_model->getfilteredData("select max(AttTime) as OutTime,Enroll_No,AttDate from 
-                                tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre2' AND '$modified_totimeold2' AND Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='1' ");
-                                    $OutDate2 = $dt_out_Records['dt_out_Records2'][0]->AttDate;
-                                    $OutTime2 = $dt_out_Records['dt_out_Records2'][0]->OutTime;
+                            //         // Out Ekak nethnm check nextday(1st nextDay)
+                            //         // if ($OutTime1 == null) {
+                            //         //     $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
+                            //         //     // $newDate = $to_date1;
 
-                                    // Out Ekak nethnm check nextday(1st nextDay)
-                                    if ($OutTime2 == null) {
-                                        $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
-                                        // $newDate = $to_date1;
+                            //         //     // Get the CheckOut in the nextDay (before 9am)
+                            //         //     $dt_out_Records['dt_out_Records1'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //         //     tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre1' AND '$modified_totimeold1' AND Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' ");//update the 9 to 11.59 
+                            //         //     // $dt_out_Records['dt_out_Records'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //         //     // tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='$newDate' AND AttTime <'09:00:00' "); old-code
+                            //         //     $OutDate1 = $dt_out_Records['dt_out_Records1'][0]->AttDate;
+                            //         //     $OutTime1 = $dt_out_Records['dt_out_Records1'][0]->OutTime;
+                            //         // }
 
-                                        // Get the CheckOut in the nextDay (before 9am)
-                                        $dt_out_Records['dt_out_Records2'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
-                                tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre1' AND '$modified_totimeold1' AND Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' ");//update the 9 to 11.59 
-                                        // $dt_out_Records['dt_out_Records'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
-                                        // tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='$newDate' AND AttTime <'09:00:00' "); old-code
-                                        $OutDate2 = $dt_out_Records['dt_out_Records2'][0]->AttDate;
-                                        $OutTime2 = $dt_out_Records['dt_out_Records2'][0]->OutTime;
-                                    }
+                            //         if ($OutTime1 == null) {
+                            //             $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
+                            //             // $newDate = $to_date1;
 
-                                    if ($OutTime2 == null) {
-                                        $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
-                                        // $newDate = $to_date1;
+                            //             $to_datetimen1 = $to_date1 . ' ' . $to_time1;
+                            //             $time1 = new DateTime($to_datetimen1);
+                            //             $time1->modify('+27 hours');
+                            //             $modified_totimeold1 = $time1->format('Y-m-d H:i:s');
 
-                                        $to_datetimen2 = $to_date2 . ' ' . $to_time2;
-                                        $time2 = new DateTime($to_datetimen2);
-                                        $time2->modify('+27 hours');
-                                        $modified_totimeold2 = $time2->format('Y-m-d H:i:s');
+                            //             // Get the CheckOut in the nextDay (before 9am)
+                            //             $dt_out_Records['dt_out_Records1'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //         tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' ");
+                            //             $OutDate1 = $dt_out_Records['dt_out_Records1'][0]->AttDate;
+                            //             $OutTime1 = $dt_out_Records['dt_out_Records1'][0]->OutTime;
+                            //         }
 
-                                        // Get the CheckOut in the nextDay (before 9am)
-                                        $dt_out_Records['dt_out_Records2'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
-                                tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' AND AttDateTimeStr <'$modified_totimeold2' ");
-                                        $OutDate2 = $dt_out_Records['dt_out_Records2'][0]->AttDate;
-                                        $OutTime2 = $dt_out_Records['dt_out_Records2'][0]->OutTime;
-                                    }
+                            //         // if(!empty($OutTime)){
+                            //         $dt_out_RecordsMS['dt_out_Recordsms1'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //         tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='0' AND AttTime < '" . $OutTime . "' ");
+                            //         // }
+                            //         $OuttimeMS1 = $dt_out_RecordsMS['dt_out_Recordsms1'][0]->OutTime;
 
-                                    // if ($InTime1 != '' && $OutTime1 != '') {
-                                    //     $fromtime1 = $InDate1 . " " . $InTime1;
-                                    //     $totime1 = $OutDate1 . " " . $OutTime1;
-                                    //     $timestamp11 = strtotime($fromtime1);
-                                    //     $timestamp21 = strtotime($totime1);
-                                    //     $time_difference_seconds1 = ($timestamp21 - $timestamp11);
-                                    //     $time_difference_minutes1 = $time_difference_seconds1 / 60;
-                                    //     if ($time_difference_minutes1 < 60) {
-                                    //         $OutDate1 = '';
-                                    //         $OutTime1 = '';
-                                    //     }
-                                    //     //ms wela thiyenne out time ekada balanw
-                                    //     $fromtime1 = $to_date1 . " " . $to_time1;
-                                    //     $deduct_fromtime1 = strtotime($fromtime1 . " -2 hour");
-                                    //     $plus_fromtime1 = strtotime($fromtime1 . " +2 hour");
-                                    //     $ct1 = $InDate1 . " " . $InTime1;
-                                    //     $check_time1 = strtotime($ct1);
-                                    //     if ($deduct_fromtime1 <= $check_time1 && $check_time1 <= $plus_fromtime1) {
-                                    //         $OutDate1 = $InDate1;
-                                    //         $OutTime1 = $InTime1;
-                                    //         $InDate1 = '';
-                                    //         $InTime1 = '';
-                                    //     }
-                                    // }
-                                    // $InDate2 = $InDate;
-                                    // $InTime2 = $InTime;
-                                    // $OutDate2 =  $OutDate;
-                                    // $OutTime2 = $OutTime; 
-                                }
-                                $data_arr = array("InRec" => 1, "InDate" => $FromDate, "InTime" => $InTime2, "OutRec" => 1, "Day_Type" => $Day_Type, "OutDate" => $OutDate2, "OutTime" => $OutTime2, "nopay" => $Nopay, "Is_processed" => 1, "DayStatus" => $DayStatus, "BeforeExH" => $BeforeShift, "AfterExH" => $AfterShiftWH, "LateSt" => $Late_Status, "LateM" => $lateM, "EarlyDepMin" => $ED, "NetLateM" => $NetLateM, "ApprovedExH" => $ApprovedExH, "nopay_hrs" => $Nopay_Hrs, "Att_Allow" => $Att_Allowance, "DOT" => $DOT);
-                                $whereArray = array("ID_roster" => $ID_Roster2);
-                                $result = $this->Db_model->updateData("tbl_individual_roster", $data_arr, $whereArray);
-                                // echo $ID_Roster2.' '.$from_date2.' '.$to_date2.' '.$from_time2.' '.$to_time2.' '.$shift_day2.' /'.$InTime2.' '.$OutTime2;
-                                // echo "<br>";
-                            }
-                            if (!empty($ShiftDetails['shift'][3]->ID_Roster)) {
-                                $ID_Roster3 = $ShiftDetails['shift'][3]->ID_Roster;
-                                $shift_type3 = $ShiftDetails['shift'][3]->ShType;
-                                $shift_day3 = $ShiftDetails['shift'][3]->ShiftDay;
-                                $from_date3 = $ShiftDetails['shift'][3]->FDate;
-                                $from_time3 = $ShiftDetails['shift'][3]->FTime;
-                                $to_date3 = $ShiftDetails['shift'][3]->TDate;
-                                $to_time3 = $ShiftDetails['shift'][3]->TTime;
-                                $GracePrd3 = $ShiftDetails['shift'][3]->GracePrd;
-                                $cutofftime3 = $ShiftDetails['shift'][3]->HDSession;
+                            //         if (!empty($OuttimeMS1)) {
+                            //             $OutTime = null;
+                            //             $OutDate = null;
 
-                                if ($shift_type3 == "DU" || $shift_type == "EX" || $shift_type == " " || $shift_type == "null" || $shift_type == "") {
-                                    $InDate3 = '';
-                                    $InTime3 = '';
-                                    $OutDate3 = '';
-                                    $OutTime3 = '';
+                            //         }
 
-                                    $lateM3 = '';
-                                    $ED3 = '';
-                                    $DayStatus3 = '';
-                                    $AfterShiftWH3 = '';
-                                    $DOT3 = '';
+                            //         // if ($InTime1 != '' && $OutTime1 != '') {
+                            //         //     $fromtime1 = $InDate1 . " " . $InTime1;
+                            //         //     $totime1 = $OutDate1 . " " . $OutTime1;
+                            //         //     $timestamp11 = strtotime($fromtime1);
+                            //         //     $timestamp21 = strtotime($totime1);
+                            //         //     $time_difference_seconds1 = ($timestamp21 - $timestamp11);
+                            //         //     $time_difference_minutes1 = $time_difference_seconds1 / 60;
+                            //         //     if ($time_difference_minutes1 < 60) {
+                            //         //         $OutDate1 = '';
+                            //         //         $OutTime1 = '';
+                            //         //     }
+                            //         //     //ms wela thiyenne out time ekada balanw
+                            //         //     $fromtime1 = $to_date1 . " " . $to_time1;
+                            //         //     $deduct_fromtime1 = strtotime($fromtime1 . " -2 hour");
+                            //         //     $plus_fromtime1 = strtotime($fromtime1 . " +2 hour");
+                            //         //     $ct1 = $InDate1 . " " . $InTime1;
+                            //         //     $check_time1 = strtotime($ct1);
+                            //         //     if ($deduct_fromtime1 <= $check_time1 && $check_time1 <= $plus_fromtime1) {
+                            //         //         $OutDate1 = $InDate1;
+                            //         //         $OutTime1 = $InTime1;
+                            //         //         $InDate1 = '';
+                            //         //         $InTime1 = '';
+                            //         //     }
+                            //         // }
+                            //     }
+                            //     // echo $ID_Roster1.' '.$from_date1.' '.$to_date1.' '.$from_time1.' '.$to_time1.' '.$shift_day1.' /'.$InTime1.' -'.$OutTime1;
+                            //     // echo "<br>";
+                            //     // $InDate1 = $InDate;
+                            //     // $InTime1 = $InTime;
+                            //     // $OutDate1 =  $OutDate;
+                            //     // $OutTime1 = $OutTime; 
+                            //     // if ($InTime == "00:00:00" || $InTime == null) {
+                            //     //     $OutTime = "00:00:00";
+                            //     //     $OutTime = "00:00:00";
 
-                                    // from - old
-                                    $from_datetime3 = $from_date3 . ' ' . $from_time3;
-                                    $time3 = new DateTime($from_datetime3);
-                                    $time3->modify('-2 hours');
-                                    $modified_fromtimepre3 = $time3->format('Y-m-d H:i:s');
-                                    // from - future
-                                    $from_datetimen3 = $from_date3 . ' ' . $from_time3;
-                                    $time3 = new DateTime($from_datetimen3);
-                                    $time3->modify('+2 hours');
-                                    $modified_fromtimeold3 = $time3->format('Y-m-d H:i:s');
+                            //     // }
+                            //     $data_arr = array("InRec" => 1, "InDate" => $FromDate, "InTime" => $InTime1, "OutRec" => 1, "Day_Type" => $Day_Type, "OutDate" => $OutDate1, "OutTime" => $OutTime1, "nopay" => $Nopay, "Is_processed" => 1, "DayStatus" => $DayStatus, "BeforeExH" => $BeforeShift, "AfterExH" => $AfterShiftWH, "LateSt" => $Late_Status, "LateM" => $lateM, "EarlyDepMin" => $ED, "NetLateM" => $NetLateM, "ApprovedExH" => $ApprovedExH, "nopay_hrs" => $Nopay_Hrs, "Att_Allow" => $Att_Allowance, "DOT" => $DOT);
+                            //     $whereArray = array("ID_roster" => $ID_Roster1);
+                            //     $result = $this->Db_model->updateData("tbl_individual_roster", $data_arr, $whereArray);
+                            // }
 
-                                    // to - old
-                                    $to_datetime3 = $to_date3 . ' ' . $to_time3;
-                                    $time3 = new DateTime($to_datetime3);
-                                    $time3->modify('-2 hours');
-                                    $modified_totimepre3 = $time3->format('Y-m-d H:i:s');
-                                    // to - future
-                                    $to_datetimen3 = $to_date3 . ' ' . $to_time3;
-                                    $time3 = new DateTime($to_datetimen3);
-                                    $time3->modify('+2 hours');
-                                    $modified_totimeold3 = $time3->format('Y-m-d H:i:s');
+                            // if (!empty($ShiftDetails['shift'][2]->ID_Roster)) {
 
 
-                                    // Get the CheckIN
-                                    $dt_in_Records['dt_Records3'] = $this->Db_model->getfilteredData("select min(AttTime) as INTime,Enroll_No,AttDate from 
-                                tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_fromtimepre3' AND '$modified_fromtimeold3' AND Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='0' ");
-                                    $InDate3 = $dt_in_Records['dt_Records3'][0]->AttDate;
-                                    $InTime3 = $dt_in_Records['dt_Records3'][0]->INTime;
+                            //     $ID_Roster2 = $ShiftDetails['shift'][2]->ID_Roster;
+                            //     if ($ShiftDetails['shift'][2]->ShType == null || empty($ShiftDetails['shift'][2]->ShType)) {
+                            //         $shift_type2 = 'EX';
+                            //     }
+                            //     $shift_type2 = $ShiftDetails['shift'][2]->ShType;
+                            //     $shift_day2 = $ShiftDetails['shift'][2]->ShiftDay;
+                            //     $from_date2 = $ShiftDetails['shift'][2]->FDate;
+                            //     $from_time2 = $ShiftDetails['shift'][2]->FTime;
+                            //     $to_date2 = $ShiftDetails['shift'][2]->TDate;
+                            //     $to_time2 = $ShiftDetails['shift'][2]->TTime;
+                            //     $GracePrd2 = $ShiftDetails['shift'][2]->GracePrd;
+                            //     $cutofftime2 = $ShiftDetails['shift'][2]->HDSession;
 
-                                    // Get the CheckOut
-                                    $dt_out_Records['dt_out_Records3'] = $this->Db_model->getfilteredData("select max(AttTime) as OutTime,Enroll_No,AttDate from 
-                                tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre3' ANDD '$modified_totimeold3' AND Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='1' ");
-                                    $OutDate3 = $dt_out_Records['dt_out_Records3'][0]->AttDate;
-                                    $OutTime3 = $dt_out_Records['dt_out_Records3'][0]->OutTime;
+                            //     if ($shift_type2 == "DU" || $shift_type == "EX" || $shift_type == " " || $shift_type == "null" || $shift_type == "") {
+                            //         $InDate2 = '2000-00-00';
+                            //         $InTime2 = '00:00:00';
+                            //         $OutDate2 = '2000-00-00';
+                            //         $OutTime2 = '00:00:00';
 
-                                    // Out Ekak nethnm check nextday(1st nextDay)
-                                    if ($OutTime3 == null) {
-                                        $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
-                                        // $newDate = $to_date1;
+                            //         $lateM2 = '';
+                            //         $ED2 = '';
+                            //         $DayStatus2 = '';
+                            //         $AfterShiftWH2 = '';
+                            //         $DOT2 = '';
 
-                                        // Get the CheckOut in the nextDay (before 9am)
-                                        $dt_out_Records['dt_out_Records3'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
-                                tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre3' AND '$modified_totimeold3' AND Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' ");//update the 9 to 11.59 
-                                        // $dt_out_Records['dt_out_Records'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
-                                        // tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='$newDate' AND AttTime <'09:00:00' "); old-code
-                                        $OutDate3 = $dt_out_Records['dt_out_Records3'][0]->AttDate;
-                                        $OutTime3 = $dt_out_Records['dt_out_Records3'][0]->OutTime;
-                                    }
+                            //         // from - old
+                            //         $from_datetime2 = $from_date2 . ' ' . $from_time2;
+                            //         $time2 = new DateTime($from_datetime2);
+                            //         $time2->modify('-2 hours');
+                            //         $modified_fromtimepre2 = $time2->format('Y-m-d H:i:s');
+                            //         // from - future
+                            //         $from_datetimen2 = $from_date2 . ' ' . $from_time2;
+                            //         $time2 = new DateTime($from_datetimen2);
+                            //         $time2->modify('+2 hours');
+                            //         $modified_fromtimeold2 = $time2->format('Y-m-d H:i:s');
 
-                                    // if ($InTime1 != '' && $OutTime1 != '') {
-                                    //     $fromtime1 = $InDate1 . " " . $InTime1;
-                                    //     $totime1 = $OutDate1 . " " . $OutTime1;
-                                    //     $timestamp11 = strtotime($fromtime1);
-                                    //     $timestamp21 = strtotime($totime1);
-                                    //     $time_difference_seconds1 = ($timestamp21 - $timestamp11);
-                                    //     $time_difference_minutes1 = $time_difference_seconds1 / 60;
-                                    //     if ($time_difference_minutes1 < 60) {
-                                    //         $OutDate1 = '';
-                                    //         $OutTime1 = '';
-                                    //     }
-                                    //     //ms wela thiyenne out time ekada balanw
-                                    //     $fromtime1 = $to_date1 . " " . $to_time1;
-                                    //     $deduct_fromtime1 = strtotime($fromtime1 . " -2 hour");
-                                    //     $plus_fromtime1 = strtotime($fromtime1 . " +2 hour");
-                                    //     $ct1 = $InDate1 . " " . $InTime1;
-                                    //     $check_time1 = strtotime($ct1);
-                                    //     if ($deduct_fromtime1 <= $check_time1 && $check_time1 <= $plus_fromtime1) {
-                                    //         $OutDate1 = $InDate1;
-                                    //         $OutTime1 = $InTime1;
-                                    //         $InDate1 = '';
-                                    //         $InTime1 = '';
-                                    //     }
-                                    // }
-                                    // $InDate3 = $InDate;
-                                    // $InTime3 = $InTime;
-                                    // $OutDate3 =  $OutDate;
-                                    // $OutTime3 = $OutTime; 
-                                    $data_arr = array("InRec" => 1, "InDate" => $FromDate, "InTime" => $InTime3, "OutRec" => 1, "Day_Type" => $Day_Type, "OutDate" => $OutDate3, "OutTime" => $OutTime3, "nopay" => $Nopay, "Is_processed" => 1, "DayStatus" => $DayStatus, "BeforeExH" => $BeforeShift, "AfterExH" => $AfterShiftWH, "LateSt" => $Late_Status, "LateM" => $lateM, "EarlyDepMin" => $ED, "NetLateM" => $NetLateM, "ApprovedExH" => $ApprovedExH, "nopay_hrs" => $Nopay_Hrs, "Att_Allow" => $Att_Allowance, "DOT" => $DOT);
-                                    $whereArray = array("ID_roster" => $ID_Roster3);
-                                    $result = $this->Db_model->updateData("tbl_individual_roster", $data_arr, $whereArray);
-                                }
+                            //         // to - old
+                            //         $to_datetime2 = $to_date2 . ' ' . $to_time2;
+                            //         $time2 = new DateTime($to_datetime2);
+                            //         $time2->modify('-2 hours');
+                            //         $modified_totimepre2 = $time2->format('Y-m-d H:i:s');
+                            //         // to - future
+                            //         $to_datetimen2 = $to_date2 . ' ' . $to_time2;
+                            //         $time2 = new DateTime($to_datetimen2);
+                            //         $time2->modify('+2 hours');
+                            //         $modified_totimeold2 = $time2->format('Y-m-d H:i:s');
 
-                                // echo $ID_Roster3.' '.$from_date3.' '.$to_date3.' '.$from_time3.' '.$to_time3.' '.$shift_day3.' /'.$InTime3.' -'.$OutTime3;
-                                // echo "<br>";
-                            }
+
+                            //         // Get the CheckIN
+                            //         $dt_in_Records['dt_Records2'] = $this->Db_model->getfilteredData("select min(AttTime) as INTime,Enroll_No,AttDate from 
+                            //     tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_fromtimepre2' AND '$modified_fromtimeold2' AND Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='0' ");
+                            //         $InDate2 = $dt_in_Records['dt_Records2'][0]->AttDate;
+                            //         $InTime2 = $dt_in_Records['dt_Records2'][0]->INTime;
+
+                            //         // Get the CheckOut
+                            //         $dt_out_Records['dt_out_Records2'] = $this->Db_model->getfilteredData("select max(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //     tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre2' AND '$modified_totimeold2' AND Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='1' ");
+                            //         $OutDate2 = $dt_out_Records['dt_out_Records2'][0]->AttDate;
+                            //         $OutTime2 = $dt_out_Records['dt_out_Records2'][0]->OutTime;
+
+                            //         // Out Ekak nethnm check nextday(1st nextDay)
+                            //         if ($OutTime2 == null) {
+                            //             $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
+                            //             // $newDate = $to_date1;
+
+                            //             // Get the CheckOut in the nextDay (before 9am)
+                            //             $dt_out_Records['dt_out_Records2'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //     tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre1' AND '$modified_totimeold1' AND Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' ");//update the 9 to 11.59 
+                            //             // $dt_out_Records['dt_out_Records'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //             // tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='$newDate' AND AttTime <'09:00:00' "); old-code
+                            //             $OutDate2 = $dt_out_Records['dt_out_Records2'][0]->AttDate;
+                            //             $OutTime2 = $dt_out_Records['dt_out_Records2'][0]->OutTime;
+                            //         }
+
+                            //         if ($OutTime2 == null) {
+                            //             $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
+                            //             // $newDate = $to_date1;
+
+                            //             $to_datetimen2 = $to_date2 . ' ' . $to_time2;
+                            //             $time2 = new DateTime($to_datetimen2);
+                            //             $time2->modify('+27 hours');
+                            //             $modified_totimeold2 = $time2->format('Y-m-d H:i:s');
+
+                            //             // Get the CheckOut in the nextDay (before 9am)
+                            //             $dt_out_Records['dt_out_Records2'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //     tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' AND AttDateTimeStr <'$modified_totimeold2' ");
+                            //             $OutDate2 = $dt_out_Records['dt_out_Records2'][0]->AttDate;
+                            //             $OutTime2 = $dt_out_Records['dt_out_Records2'][0]->OutTime;
+                            //         }
+
+                            //         // if ($InTime1 != '' && $OutTime1 != '') {
+                            //         //     $fromtime1 = $InDate1 . " " . $InTime1;
+                            //         //     $totime1 = $OutDate1 . " " . $OutTime1;
+                            //         //     $timestamp11 = strtotime($fromtime1);
+                            //         //     $timestamp21 = strtotime($totime1);
+                            //         //     $time_difference_seconds1 = ($timestamp21 - $timestamp11);
+                            //         //     $time_difference_minutes1 = $time_difference_seconds1 / 60;
+                            //         //     if ($time_difference_minutes1 < 60) {
+                            //         //         $OutDate1 = '';
+                            //         //         $OutTime1 = '';
+                            //         //     }
+                            //         //     //ms wela thiyenne out time ekada balanw
+                            //         //     $fromtime1 = $to_date1 . " " . $to_time1;
+                            //         //     $deduct_fromtime1 = strtotime($fromtime1 . " -2 hour");
+                            //         //     $plus_fromtime1 = strtotime($fromtime1 . " +2 hour");
+                            //         //     $ct1 = $InDate1 . " " . $InTime1;
+                            //         //     $check_time1 = strtotime($ct1);
+                            //         //     if ($deduct_fromtime1 <= $check_time1 && $check_time1 <= $plus_fromtime1) {
+                            //         //         $OutDate1 = $InDate1;
+                            //         //         $OutTime1 = $InTime1;
+                            //         //         $InDate1 = '';
+                            //         //         $InTime1 = '';
+                            //         //     }
+                            //         // }
+                            //         // $InDate2 = $InDate;
+                            //         // $InTime2 = $InTime;
+                            //         // $OutDate2 =  $OutDate;
+                            //         // $OutTime2 = $OutTime; 
+                            //     }
+                            //     $data_arr = array("InRec" => 1, "InDate" => $FromDate, "InTime" => $InTime2, "OutRec" => 1, "Day_Type" => $Day_Type, "OutDate" => $OutDate2, "OutTime" => $OutTime2, "nopay" => $Nopay, "Is_processed" => 1, "DayStatus" => $DayStatus, "BeforeExH" => $BeforeShift, "AfterExH" => $AfterShiftWH, "LateSt" => $Late_Status, "LateM" => $lateM, "EarlyDepMin" => $ED, "NetLateM" => $NetLateM, "ApprovedExH" => $ApprovedExH, "nopay_hrs" => $Nopay_Hrs, "Att_Allow" => $Att_Allowance, "DOT" => $DOT);
+                            //     $whereArray = array("ID_roster" => $ID_Roster2);
+                            //     $result = $this->Db_model->updateData("tbl_individual_roster", $data_arr, $whereArray);
+                            //     // echo $ID_Roster2.' '.$from_date2.' '.$to_date2.' '.$from_time2.' '.$to_time2.' '.$shift_day2.' /'.$InTime2.' '.$OutTime2;
+                            //     // echo "<br>";
+                            // }
+                            // if (!empty($ShiftDetails['shift'][3]->ID_Roster)) {
+                            //     $ID_Roster3 = $ShiftDetails['shift'][3]->ID_Roster;
+                            //     $shift_type3 = $ShiftDetails['shift'][3]->ShType;
+                            //     $shift_day3 = $ShiftDetails['shift'][3]->ShiftDay;
+                            //     $from_date3 = $ShiftDetails['shift'][3]->FDate;
+                            //     $from_time3 = $ShiftDetails['shift'][3]->FTime;
+                            //     $to_date3 = $ShiftDetails['shift'][3]->TDate;
+                            //     $to_time3 = $ShiftDetails['shift'][3]->TTime;
+                            //     $GracePrd3 = $ShiftDetails['shift'][3]->GracePrd;
+                            //     $cutofftime3 = $ShiftDetails['shift'][3]->HDSession;
+
+                            //     if ($shift_type3 == "DU" || $shift_type == "EX" || $shift_type == " " || $shift_type == "null" || $shift_type == "") {
+                            //         $InDate3 = '';
+                            //         $InTime3 = '';
+                            //         $OutDate3 = '';
+                            //         $OutTime3 = '';
+
+                            //         $lateM3 = '';
+                            //         $ED3 = '';
+                            //         $DayStatus3 = '';
+                            //         $AfterShiftWH3 = '';
+                            //         $DOT3 = '';
+
+                            //         // from - old
+                            //         $from_datetime3 = $from_date3 . ' ' . $from_time3;
+                            //         $time3 = new DateTime($from_datetime3);
+                            //         $time3->modify('-2 hours');
+                            //         $modified_fromtimepre3 = $time3->format('Y-m-d H:i:s');
+                            //         // from - future
+                            //         $from_datetimen3 = $from_date3 . ' ' . $from_time3;
+                            //         $time3 = new DateTime($from_datetimen3);
+                            //         $time3->modify('+2 hours');
+                            //         $modified_fromtimeold3 = $time3->format('Y-m-d H:i:s');
+
+                            //         // to - old
+                            //         $to_datetime3 = $to_date3 . ' ' . $to_time3;
+                            //         $time3 = new DateTime($to_datetime3);
+                            //         $time3->modify('-2 hours');
+                            //         $modified_totimepre3 = $time3->format('Y-m-d H:i:s');
+                            //         // to - future
+                            //         $to_datetimen3 = $to_date3 . ' ' . $to_time3;
+                            //         $time3 = new DateTime($to_datetimen3);
+                            //         $time3->modify('+2 hours');
+                            //         $modified_totimeold3 = $time3->format('Y-m-d H:i:s');
+
+
+                            //         // Get the CheckIN
+                            //         $dt_in_Records['dt_Records3'] = $this->Db_model->getfilteredData("select min(AttTime) as INTime,Enroll_No,AttDate from 
+                            //     tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_fromtimepre3' AND '$modified_fromtimeold3' AND Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='0' ");
+                            //         $InDate3 = $dt_in_Records['dt_Records3'][0]->AttDate;
+                            //         $InTime3 = $dt_in_Records['dt_Records3'][0]->INTime;
+
+                            //         // Get the CheckOut
+                            //         $dt_out_Records['dt_out_Records3'] = $this->Db_model->getfilteredData("select max(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //     tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre3' ANDD '$modified_totimeold3' AND Enroll_No='$EmpNo' and AttDate='" . $FromDate . "' AND Status='1' ");
+                            //         $OutDate3 = $dt_out_Records['dt_out_Records3'][0]->AttDate;
+                            //         $OutTime3 = $dt_out_Records['dt_out_Records3'][0]->OutTime;
+
+                            //         // Out Ekak nethnm check nextday(1st nextDay)
+                            //         if ($OutTime3 == null) {
+                            //             $newDate = date('Y-m-d', strtotime($FromDate . ' +1 day'));
+                            //             // $newDate = $to_date1;
+
+                            //             // Get the CheckOut in the nextDay (before 9am)
+                            //             $dt_out_Records['dt_out_Records3'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //     tbl_u_attendancedata where AttDateTimeStr BETWEEN '$modified_totimepre3' AND '$modified_totimeold3' AND Enroll_No='$EmpNo' and AttDate='" . $newDate . "' AND Status='1' ");//update the 9 to 11.59 
+                            //             // $dt_out_Records['dt_out_Records'] = $this->Db_model->getfilteredData("select min(AttTime) as OutTime,Enroll_No,AttDate from 
+                            //             // tbl_u_attendancedata where Enroll_No='$EmpNo' and AttDate='$newDate' AND AttTime <'09:00:00' "); old-code
+                            //             $OutDate3 = $dt_out_Records['dt_out_Records3'][0]->AttDate;
+                            //             $OutTime3 = $dt_out_Records['dt_out_Records3'][0]->OutTime;
+                            //         }
+
+                            //         // if ($InTime1 != '' && $OutTime1 != '') {
+                            //         //     $fromtime1 = $InDate1 . " " . $InTime1;
+                            //         //     $totime1 = $OutDate1 . " " . $OutTime1;
+                            //         //     $timestamp11 = strtotime($fromtime1);
+                            //         //     $timestamp21 = strtotime($totime1);
+                            //         //     $time_difference_seconds1 = ($timestamp21 - $timestamp11);
+                            //         //     $time_difference_minutes1 = $time_difference_seconds1 / 60;
+                            //         //     if ($time_difference_minutes1 < 60) {
+                            //         //         $OutDate1 = '';
+                            //         //         $OutTime1 = '';
+                            //         //     }
+                            //         //     //ms wela thiyenne out time ekada balanw
+                            //         //     $fromtime1 = $to_date1 . " " . $to_time1;
+                            //         //     $deduct_fromtime1 = strtotime($fromtime1 . " -2 hour");
+                            //         //     $plus_fromtime1 = strtotime($fromtime1 . " +2 hour");
+                            //         //     $ct1 = $InDate1 . " " . $InTime1;
+                            //         //     $check_time1 = strtotime($ct1);
+                            //         //     if ($deduct_fromtime1 <= $check_time1 && $check_time1 <= $plus_fromtime1) {
+                            //         //         $OutDate1 = $InDate1;
+                            //         //         $OutTime1 = $InTime1;
+                            //         //         $InDate1 = '';
+                            //         //         $InTime1 = '';
+                            //         //     }
+                            //         // }
+                            //         // $InDate3 = $InDate;
+                            //         // $InTime3 = $InTime;
+                            //         // $OutDate3 =  $OutDate;
+                            //         // $OutTime3 = $OutTime; 
+                            //         $data_arr = array("InRec" => 1, "InDate" => $FromDate, "InTime" => $InTime3, "OutRec" => 1, "Day_Type" => $Day_Type, "OutDate" => $OutDate3, "OutTime" => $OutTime3, "nopay" => $Nopay, "Is_processed" => 1, "DayStatus" => $DayStatus, "BeforeExH" => $BeforeShift, "AfterExH" => $AfterShiftWH, "LateSt" => $Late_Status, "LateM" => $lateM, "EarlyDepMin" => $ED, "NetLateM" => $NetLateM, "ApprovedExH" => $ApprovedExH, "nopay_hrs" => $Nopay_Hrs, "Att_Allow" => $Att_Allowance, "DOT" => $DOT);
+                            //         $whereArray = array("ID_roster" => $ID_Roster3);
+                            //         $result = $this->Db_model->updateData("tbl_individual_roster", $data_arr, $whereArray);
+                            //     }
+
+                            //     // echo $ID_Roster3.' '.$from_date3.' '.$to_date3.' '.$from_time3.' '.$to_time3.' '.$shift_day3.' /'.$InTime3.' -'.$OutTime3;
+                            //     // echo "<br>";
+                            // }
                             //    var_dump($ShiftDetails['shift']);
 
                             // echo $ID_Roster.' '.$from_date.' '.$to_date.' '.$from_time.' '.$to_time.' '.$shift_day;
@@ -2508,68 +2510,68 @@ class Attendance_Process_New extends CI_Controller
                             // }
 
 
-                            // echo $ID_Roster;
-                            // echo "<br/>";
-                            // echo $EmpNo;
-                            // echo "<br/>";
-                            // echo $FromDate;
-                            // echo "<br/>";
-                            // echo "from date-" . $from_date;
-                            // echo "<br/>";
-                            // echo "from time-" . $from_time;
-                            // echo "<br/>";
-                            // echo "in date-" . $InDate;
-                            // echo "<br/>";
-                            // echo "in time-" . $InTime;
-                            // echo "<br/>";
-                            // echo "<br/>";
-                            // echo "to date-" . $to_date;
-                            // echo "<br/>";
-                            // echo "to time-" . $to_time;
-                            // echo "<br/>";
-                            // echo "out date-" . $OutDate;
-                            // echo "<br/>";
-                            // echo "out time-" . $OutTime;
-                            // echo "<br/>";
-                            // echo "Late " . $lateM;
-                            // echo "<br/>";
-                            // echo "ED " . $ED;
-                            // echo "<br/>";
-                            // echo "DayStatus " . $DayStatus;
-                            // echo "<br/>";
-                            // echo "OT " . $AfterShiftWH;
-                            // echo "<br/>";
-                            // echo "dot" . $DOT;
-                            // echo "<br/>";
-                            // // // echo "in 3-" . $InmoTime3;
-                            // // // echo "<br/>";
-                            // // // echo "out 3-" . $OutDate3;
-                            // // // echo "<br/>";
-                            // // // echo "out 3-" . $OutTime3;
-                            // // // echo "<br/>";
-                            // // // echo "workhours1-" . $workhours1;
-                            // // // echo "<br/>";
-                            // // // echo "workhours2-" . $workhours2;
-                            // // // echo "<br/>";
-                            // // // echo "workhours3-" . $workhours3;
-                            // // // echo "<br/>";
-                            // // // echo "workhours3-" . $workhours;
-                            // // // echo "<br/>";
-                            // // // echo "dot1-" . $DOT1;
-                            // // // echo "<br/>";
-                            // // // echo "dot2-" . $DOT2;
-                            // // // echo "<br/>";
-                            // // // echo "dot3-" . $DOT3;
-                            // // // echo "<br/>";
-                            // // // echo "dot-" . $DOT;
-                            // // // echo "<br/>";
-                            // // // echo "out" . $OutTime;
-                            // // // echo "<br/>";
-                            // // // echo "outd-" . $OutDate;
-                            // echo "<br/>";
-                            // echo "<br/>";
-                            // echo "<br/>";
-                            // echo "<br/>";
+                            echo $ID_Roster;
+                            echo "<br/>";
+                            echo $EmpNo;
+                            echo "<br/>";
+                            echo $FromDate;
+                            echo "<br/>";
+                            echo "from date-" . $from_date;
+                            echo "<br/>";
+                            echo "from time-" . $from_time;
+                            echo "<br/>";
+                            echo "in date-" . $InDate;
+                            echo "<br/>";
+                            echo "in time-" . $InTime;
+                            echo "<br/>";
+                            echo "<br/>";
+                            echo "to date-" . $to_date;
+                            echo "<br/>";
+                            echo "to time-" . $to_time;
+                            echo "<br/>";
+                            echo "out date-" . $OutDate;
+                            echo "<br/>";
+                            echo "out time-" . $OutTime;
+                            echo "<br/>";
+                            echo "Late " . $lateM;
+                            echo "<br/>";
+                            echo "ED " . $ED;
+                            echo "<br/>";
+                            echo "DayStatus " . $DayStatus;
+                            echo "<br/>";
+                            echo "OT " . $AfterShiftWH;
+                            echo "<br/>";
+                            echo "dot" . $DOT;
+                            echo "<br/>";
+                            // // echo "in 3-" . $InmoTime3;
+                            // // echo "<br/>";
+                            // // echo "out 3-" . $OutDate3;
+                            // // echo "<br/>";
+                            // // echo "out 3-" . $OutTime3;
+                            // // echo "<br/>";
+                            // // echo "workhours1-" . $workhours1;
+                            // // echo "<br/>";
+                            // // echo "workhours2-" . $workhours2;
+                            // // echo "<br/>";
+                            // // echo "workhours3-" . $workhours3;
+                            // // echo "<br/>";
+                            // // echo "workhours3-" . $workhours;
+                            // // echo "<br/>";
+                            // // echo "dot1-" . $DOT1;
+                            // // echo "<br/>";
+                            // // echo "dot2-" . $DOT2;
+                            // // echo "<br/>";
+                            // // echo "dot3-" . $DOT3;
+                            // // echo "<br/>";
+                            // // echo "dot-" . $DOT;
+                            // // echo "<br/>";
+                            // // echo "out" . $OutTime;
+                            // // echo "<br/>";
+                            // // echo "outd-" . $OutDate;
+                            echo "<br/>";
+                            echo "<br/>";
+                            echo "<br/>";
+                            echo "<br/>";
                             // die;
                             //  $data_arr = array("InRec" => 1, "InDate" => $FromDate, "InTime" => $InTime, "OutRec" => 1,"Day_Type" => $Day_Type, "OutDate" => $OutDate, "OutTime" => $OutTime, "nopay" => $Nopay, "Is_processed" => 1, "DayStatus" => $DayStatus, "BeforeExH" => $BeforeShift, "AfterExH" => $AfterShiftWH, "LateSt" => $Late_Status, "LateM" => $lateM, "EarlyDepMin" => $ED, "NetLateM" => $NetLateM, "ApprovedExH" => $ApprovedExH, "nopay_hrs" => $Nopay_Hrs, "Att_Allow" => $Att_Allowance,"DOT" => $DOT);
                             //  $whereArray = array("ID_roster" => $ID_Roster);
@@ -2588,19 +2590,20 @@ class Attendance_Process_New extends CI_Controller
 
                 // $this->session->set_flashdata('success_message', 'Attendance Process successfully');
                 // redirect('/Attendance/Attendance_Process_New');
-            }else {
-                $this->session->set_flashdata('success_message', 'Attendance Process successfully');
-                redirect('/Attendance/Attendance_Process_New');
-
             }
+            // else {
+            //     $this->session->set_flashdata('success_message', 'Attendance Process successfully');
+            //     redirect('/Attendance/Attendance_Process_New');
+
+            // }
             // $ID_Roster = $this->Db_model->getfilteredData("SELECT COUNT(ID_Roster) AS ID FROM `tbl_individual_roster` WHERE `tbl_individual_roster`.`Is_processed` = '0' AND FDate BETWEEN '" . $from_date . "' AND '" . $to_date . "';");
             // $WData = $ID_Roster[0]->ID;
             // $this->session->set_flashdata('WData', $WData);
 
 
 
-            $this->session->set_flashdata('success_message', 'Attendance Process successfully');
-            redirect('/Attendance/Attendance_Process_New');
+            // $this->session->set_flashdata('success_message', 'Attendance Process successfully');
+            // redirect('/Attendance/Attendance_Process_New');
             // }
         }
     }
