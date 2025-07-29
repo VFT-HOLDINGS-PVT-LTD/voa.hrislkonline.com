@@ -211,6 +211,10 @@ class Attendance_Process_New extends CI_Controller
                             $newDate = 0;
                             $ShiftType = ' ';
                             $DayStatus = ' ';
+                            $InDate2 = '2000-00-00';
+                            $InTime2 = '00:00:00';
+                            $OutDate2 = '2000-00-00';
+                            $OutTime2 = '00:00:00';
 
 
 
@@ -1370,10 +1374,10 @@ class Attendance_Process_New extends CI_Controller
                                 $cutofftime2 = $ShiftDetails['shift'][2]->HDSession;
 
                                 if ($shift_type2 == "DU" || $shift_type == "EX" || $shift_type == " " || $shift_type == "null" || $shift_type == "") {
-                                    $InDate2 = '';
+                                    $InDate2 = '2000-00-00';
                                     $InTime2 = '00:00:00';
-                                    $OutDate2 = '';
-                                    $OutTime2 = '';
+                                    $OutDate2 = '2000-00-00';
+                                    $OutTime2 = '00:00:00';
 
                                     $lateM2 = '';
                                     $ED2 = '';
