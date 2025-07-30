@@ -150,6 +150,8 @@ for ($day = 1; $day <= $daysInMonth; $day++) {
         $statusDisplay = 'AB';
     }elseif ($dayStatus == 'OFF') {
         $statusDisplay = 'OFF';
+    }elseif ($dayStatus == 'SL') {
+        $statusDisplay = 'SL';
     }else {
         $statusDisplay = ''; // Show nothing for other statuses
     }
