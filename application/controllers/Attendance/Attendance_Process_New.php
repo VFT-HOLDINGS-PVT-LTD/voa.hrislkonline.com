@@ -115,7 +115,6 @@ class Attendance_Process_New extends CI_Controller
         $from_date = date("Y-m-01", strtotime("$year-$month-01")); // First day of the month
         $to_date = date("Y-m-t", strtotime($from_date));           // Last day of the month
 
-
         $query1 = "UPDATE tbl_individual_roster SET Is_processed = 0 WHERE FDate BETWEEN '" . $from_date . "' AND '" . $to_date . "';";
 
         $monthData = $this->Db_model->getfilteredData("SELECT * FROM `tbl_att_process`;");
@@ -2579,12 +2578,12 @@ class Attendance_Process_New extends CI_Controller
                         }
                     }
                 }
-                // $HasRow2 = $this->Db_model->getfilteredData("SELECT COUNT(EmpNo) AS HasRow FROM tbl_individual_roster WHERE Is_processed = 0 AND EXTRACT(MONTH FROM FDate)=$month and EXTRACT(YEAR FROM FDate)=$year");
-                // if ($HasRow2[0]->HasRow == 0) {
-                //     $query = "UPDATE `tbl_att_process` SET month = 0,selected_month = '0' ;";
-                //     // Run the custom query
-                //     $result = $this->Db_model->getUpdateData($query);
-                // }
+                $HasRow2 = $this->Db_model->getfilteredData("SELECT COUNT(EmpNo) AS HasRow FROM tbl_individual_roster WHERE Is_processed = 0 AND EXTRACT(MONTH FROM FDate)=$month and EXTRACT(YEAR FROM FDate)=$year");
+                if ($HasRow2[0]->HasRow == 0) {
+                    $query = "UPDATE `tbl_att_process` SET month = 0,selected_month = '0' ;";
+                    // Run the custom query
+                    $result = $this->Db_model->getUpdateData($query);
+                }
 
                 // $this->session->set_flashdata('success_message', 'Attendance Process successfully');
                 // redirect('/Attendance/Attendance_Process_New');
