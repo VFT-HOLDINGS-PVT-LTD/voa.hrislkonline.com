@@ -116,13 +116,14 @@ class Attendance_Process_New extends CI_Controller
         $to_date = date("Y-m-t", strtotime($from_date));           // Last day of the month
 
         $query1 = "UPDATE tbl_individual_roster SET Is_processed = 0 WHERE FDate BETWEEN '" . $from_date . "' AND '" . $to_date . "';";
+        // Run the custom query
+        $result1 = $this->Db_model->getUpdateData($query1);
 
         $monthData = $this->Db_model->getfilteredData("SELECT * FROM `tbl_att_process`;");
         $month1 = $monthData[0]->month;
 
         if ($month1 == 0) {
-            // Run the custom query
-            $result = $this->Db_model->getUpdateData($query1);
+          
 
             $query = "UPDATE `tbl_att_process` SET month = 1,selected_month = '" . $month . "' ;";
 
