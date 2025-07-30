@@ -315,6 +315,7 @@ class Attendance_Process_New extends CI_Controller
 
 
                                 }
+                                $Shift_Day = '';
                                 $SH['SH'] = $this->Db_model->getfilteredData("select ID_roster,EmpNo,ShiftCode,ShType,ShiftDay,Day_Type,FDate,FTime,TDate,TTime,ShType,GracePrd from tbl_individual_roster where Is_processed=0 and EmpNo='$EmpNo' and FDate='$FromDate'");
                                 // $SH_Code = $SH['SH'][0]->ShiftCode;
                                 $Shift_Day = $SH['SH'][0]->ShiftDay;
