@@ -116,14 +116,14 @@ class Attendance_Process_New extends CI_Controller
         $to_date = date("Y-m-t", strtotime($from_date));           // Last day of the month
 
         $query1 = "UPDATE tbl_individual_roster SET Is_processed = 0 WHERE FDate BETWEEN '" . $from_date . "' AND '" . $to_date . "';";
-        // Run the custom query
-        $result1 = $this->Db_model->getUpdateData($query1);
+        
 
         $monthData = $this->Db_model->getfilteredData("SELECT * FROM `tbl_att_process`;");
         $month1 = $monthData[0]->month;
 
         if ($month1 == 0) {
-          
+          // Run the custom query
+            $result1 = $this->Db_model->getUpdateData($query1);
 
             $query = "UPDATE `tbl_att_process` SET month = 1,selected_month = '" . $month . "' ;";
 
@@ -161,10 +161,10 @@ class Attendance_Process_New extends CI_Controller
                         //Check If From date less than to Date
                         if ($FromDate <= $ToDate) {
                             $settings = $this->Db_model->getfilteredData("SELECT tbl_setting.Group_id,tbl_setting.Ot_m,tbl_setting.Ot_e,tbl_setting.Ot_d_Late,
-                    tbl_setting.Late,tbl_setting.Ed,tbl_setting.Min_time_t_ot_m,tbl_setting.Min_time_t_ot_e,
-                    tbl_setting.late_Grs_prd,tbl_setting.`Round`,tbl_setting.Hd_d_from,tbl_setting.Dot_f_holyday,tbl_setting.Dot_f_offday
-                     FROM tbl_setting INNER JOIN tbl_emp_group ON tbl_setting.Group_id = tbl_emp_group.Grp_ID
-                     INNER JOIN tbl_empmaster ON tbl_empmaster.Grp_ID = tbl_emp_group.Grp_ID WHERE tbl_empmaster.EmpNo = '$EmpNo'");
+                        tbl_setting.Late,tbl_setting.Ed,tbl_setting.Min_time_t_ot_m,tbl_setting.Min_time_t_ot_e,
+                        tbl_setting.late_Grs_prd,tbl_setting.`Round`,tbl_setting.Hd_d_from,tbl_setting.Dot_f_holyday,tbl_setting.Dot_f_offday
+                        FROM tbl_setting INNER JOIN tbl_emp_group ON tbl_setting.Group_id = tbl_emp_group.Grp_ID
+                        INNER JOIN tbl_empmaster ON tbl_empmaster.Grp_ID = tbl_emp_group.Grp_ID WHERE tbl_empmaster.EmpNo = '$EmpNo'");
                             $ApprovedExH = 0;
                             $DayStatus = "not";
                             $ID_Roster = '';
